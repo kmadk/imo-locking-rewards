@@ -40,9 +40,6 @@ const l2Config: Config = {
   isL1: false,
 }
 
-const blacklistedAddresses = [
-  '0xE9B3c292904114e6e6F04a363Ae4c0F800f3236D', // Ideamarket Deployer
-]
 
 type UserStats = {
   points: Number
@@ -56,6 +53,15 @@ type UserStats = {
   hasVerifiedOnL1: boolean
   hasVerifiedOnL2: boolean
 }
+
+type LockInfo = {
+  ideaToken: string,
+  owner: string,
+  lockedAmount: BN,
+  lockedUntil: number,
+  LockDuration: number,
+}
+
 
 function initializeNewUserIfNotExists(user: string) {
   if (userStats[user] !== undefined) {
@@ -86,14 +92,25 @@ const POINTS_FOR_VERIFING = 3
 const L1_MULTIPLIER = 2
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
+let lastBlockCHecked = l2Config.startBlock
+let tokenList = []
+let lockedEventList = []
+let d = {}
+d["d"] = 4
+d["tokens"] = ["x", "y", "z"]
+
 async function main() {
-  await run(l1Config)
+  // const lastBlockCHecked = js read file dict["lastBlockCHecked"]
+  // const lockedTokenList = js read fine dict["lockedTokenList"]
+  // creat a new dict with new values at respective places and rewrite file w new dict
+  
+  // run script initaially just to get L1 token addresses on the first day. then remove from here
+  await runL1(l1Config)
   await run(l2Config)
 
   const totalPoints = calculatePointScores()
   const totalPayouts = calculatePayouts(totalPoints)
   writeResult()
-  writePointsForEvents(totalPoints)
   console.log(
     `\nFound ${
       Object.keys(userStats).length
@@ -101,35 +118,6 @@ async function main() {
   )
 }
 
-function writePointsForEvents(totalPoints: number) {
-  const payoutPerPoint = TOTAL_PAYOUT.div(new BN(totalPoints))
-  const result: { [address: string]: { [action: string]: string } } = {}
-  for (const user in userStats) {
-    const stats = userStats[user]
-    result[user] = {}
-    if (stats.hasBoughtOnL1) {
-      result[user]['boughtL1'] = payoutPerPoint.mul(new BN(POINTS_FOR_BUYING)).mul(new BN(L1_MULTIPLIER)).toString()
-    } else if (stats.hasBoughtOnL2) {
-      result[user]['boughtL2'] = payoutPerPoint.mul(new BN(POINTS_FOR_BUYING)).toString()
-    }
-    if (stats.hasListedOnL1) {
-      result[user]['listedL1'] = payoutPerPoint.mul(new BN(POINTS_FOR_LISTING)).mul(new BN(L1_MULTIPLIER)).toString()
-    } else if (stats.hasListedOnL2) {
-      result[user]['listedL2'] = payoutPerPoint.mul(new BN(POINTS_FOR_LISTING)).toString()
-    }
-    if (stats.hasLockedOnL1) {
-      result[user]['lockedL1'] = payoutPerPoint.mul(new BN(POINTS_FOR_LOCKING)).mul(new BN(L1_MULTIPLIER)).toString()
-    } else if (stats.hasLockedOnL2) {
-      result[user]['lockedL2'] = payoutPerPoint.mul(new BN(POINTS_FOR_LOCKING)).toString()
-    }
-    if (stats.hasVerifiedOnL1) {
-      result[user]['verifiedL1'] = payoutPerPoint.mul(new BN(POINTS_FOR_VERIFING)).mul(new BN(L1_MULTIPLIER)).toString()
-    } else if (stats.hasVerifiedOnL2) {
-      result[user]['verifiedL2'] = payoutPerPoint.mul(new BN(POINTS_FOR_VERIFING)).toString()
-    }
-  }
-  fs.writeFileSync('point_breakdown.json', JSON.stringify(result, null, 2))
-}
 
 function writeResult() {
   const result: { [address: string]: string } = {}
@@ -162,11 +150,6 @@ function calculatePointScores(): number {
     points += Number(stats.hasBoughtOnL1) * POINTS_FOR_BUYING * L1_MULTIPLIER
     if (!stats.hasBoughtOnL1) points += Number(stats.hasBoughtOnL2) * POINTS_FOR_BUYING
     points += Number(stats.hasListedOnL1) * POINTS_FOR_LISTING * L1_MULTIPLIER
-    if (!stats.hasListedOnL1) points += Number(stats.hasListedOnL2) * POINTS_FOR_LISTING
-    points += Number(stats.hasLockedOnL1) * POINTS_FOR_LOCKING * L1_MULTIPLIER
-    if (!stats.hasLockedOnL1) points += Number(stats.hasLockedOnL2) * POINTS_FOR_LOCKING
-    points += Number(stats.hasVerifiedOnL1) * POINTS_FOR_VERIFING * L1_MULTIPLIER
-    if (!stats.hasVerifiedOnL1) points += Number(stats.hasVerifiedOnL2) * POINTS_FOR_VERIFING
 
     total += points
     stats.points = points
@@ -178,11 +161,9 @@ function calculatePointScores(): number {
 
 async function run(config: Config) {
   const { web3, exchangeAddress, factoryAddress, vaultAddress, startBlock, endBlock, isL1 } = config
-
+  await dailyPrices(web3, exchangeAddress, factoryAddress, vaultAddress, startBlock, endBlock, isL1)
   await parseBuys(web3, exchangeAddress, startBlock, endBlock, isL1)
-  await parseListings(web3, factoryAddress, startBlock, endBlock, isL1)
   await parseLocks(web3, vaultAddress, startBlock, endBlock, isL1)
-  await parseVerifications(web3, exchangeAddress, startBlock, endBlock, isL1)
 }
 
 async function parseBuys(web3: Web3, exchangeAddress: string, startBlock: number, endBlock: number, isL1: boolean) {
@@ -200,13 +181,6 @@ async function parseBuys(web3: Web3, exchangeAddress: string, startBlock: number
     const txReceipt = await web3.eth.getTransactionReceipt(tx)
     const user = web3.utils.toChecksumAddress(txReceipt.from)
     const block = txReceipt.blockNumber
-
-    // Check if address is blacklisted
-    for (const blacklisted of blacklistedAddresses) {
-      if (blacklisted.toLowerCase() === user.toLowerCase()) {
-        continue
-      }
-    }
 
     // Get all of this tokens' transfer events in the same block as the InvestedState event
     const tokenAddress = investedStateEvent.returnValues.ideaToken
@@ -235,37 +209,12 @@ async function parseBuys(web3: Web3, exchangeAddress: string, startBlock: number
   bar.stop()
 }
 
-async function parseListings(web3: Web3, factoryAddress: string, startBlock: number, endBlock: number, isL1: boolean) {
-  // Fetch all NewToken events
-  const factory = new web3.eth.Contract(IdeaTokenFactoryABI as any, factoryAddress)
-  const newTokenEvents = await fetchPastEvents(factory, 'NewToken', startBlock, endBlock, true)
 
-  // Iterate over events to fetch user addresses
-  console.log(`\nParsing ${newTokenEvents.length} NewToken events`)
-  const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
-  bar.start(newTokenEvents.length, 0)
-  for (const newTokenEvent of newTokenEvents) {
-    const tx = newTokenEvent.transactionHash
-    const txReceipt = await web3.eth.getTransactionReceipt(tx)
-    const user = web3.utils.toChecksumAddress(txReceipt.from)
-
-    initializeNewUserIfNotExists(user)
-    if (isL1) {
-      userStats[user].hasListedOnL1 = true
-    } else {
-      userStats[user].hasListedOnL2 = true
-    }
-    bar.increment()
-  }
-
-  bar.stop()
-}
-
-async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, endBlock: number, isL1: boolean) {
+async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, endBlock: number) {
   // Fetch all Locked events
   const vault = new web3.eth.Contract(IdeaTokenVaultABI as any, vaultAddress)
   const lockedEvents = await fetchPastEvents(vault, 'Locked', startBlock, endBlock, true)
-
+  
   // Iterate over events to fetch user addresses
   console.log(`\nParsing ${lockedEvents.length} Locked events`)
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
@@ -274,62 +223,39 @@ async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, 
     const tx = lockedEvent.transactionHash
     const txReceipt = await web3.eth.getTransactionReceipt(tx)
     const user = web3.utils.toChecksumAddress(txReceipt.from)
-
-    // Check if address is blacklisted
-    for (const blacklisted of blacklistedAddresses) {
-      if (blacklisted.toLowerCase() === user.toLowerCase()) {
-        continue
-      }
-    }
-
-    initializeNewUserIfNotExists(user)
-    if (isL1) {
-      userStats[user].hasLockedOnL1 = true
-    } else {
-      userStats[user].hasLockedOnL2 = true
-    }
+    
+    tokenList.push(lockedEvent.returnValue.ideaToken)
+    // read store a lock event struct that writes the details of the lock for later use
+    lockedEventList.push({ideaToken: lockedEvent.returnValue.ideaToken, user: lockedEventS, block: lockedEvent.blockNumber})
     bar.increment()
   }
-
   bar.stop()
+
+  return tokenList
 }
 
-async function parseVerifications(
-  web3: Web3,
-  exchangeAddress: string,
-  startBlock: number,
-  endBlock: number,
-  isL1: boolean
-) {
-  // Fetch all NewTokenOwner events
+async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: string, startBlock: number, endBlock: number) {
+  // Fetch all InvestedState events
   const exchange = new web3.eth.Contract(IdeaTokenExchangeABI as any, exchangeAddress)
-  const newTokenOwnerEvents = await fetchPastEvents(exchange, 'NewTokenOwner', startBlock, endBlock, true)
+  let existingTokens = [] //read from file
+  let newTokens = await parseLocks(web3, vaultAddress, startBlock, endBlock)
+  let tokens = Array.from(new Set(newTokens.concat(existingTokens)))
 
-  // Iterate over events to fetch user addresses
-  console.log(`\nParsing ${newTokenOwnerEvents.length} NewTokenOwner events`)
+  console.log(`\nParsing ${tokens.length} Token list`)
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
-  bar.start(newTokenOwnerEvents.length, 0)
-  for (const newTokenOwnerEvent of newTokenOwnerEvents) {
-    const user = web3.utils.toChecksumAddress(newTokenOwnerEvent.returnValues.owner)
+  bar.start(tokens.length, 0)
 
-    // Check if address is blacklisted
-    for (const blacklisted of blacklistedAddresses) {
-      if (blacklisted.toLowerCase() === user.toLowerCase()) {
-        continue
-      }
-    }
+  let priceDict = {}
+  for (const token of tokens) {
+    // get token price 
+    // write dict of token address to price for that specific date
+    priceDict[token] = await getTokenPrice(web3, token)
 
-    initializeNewUserIfNotExists(user)
-
-    if (isL1) {
-      userStats[user].hasVerifiedOnL1 = true
-    } else {
-      userStats[user].hasVerifiedOnL2 = true
-    }
     bar.increment()
   }
-
+  // write priceDict to file for that date
   bar.stop()
+  //write new file with new tokens and endblock
 }
 
 async function fetchPastEvents(

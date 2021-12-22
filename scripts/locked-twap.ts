@@ -92,13 +92,14 @@ async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, 
   return tokenList
 }
 
-function weightLocked(lockedEventList: LockInfo[]) {
+function weighLocked(lockedEventList: LockInfo[]) {
   // if timelocked > 1 month multiply amount by 1.2
   for (const lock of lockedEventList) {
     if (lock.lockDuration > 30 * 60 * 60 * 24) {
-      lock.lockedAmount = lock.lockedAmount.mul(new BN('1.2'))
+      lock.lockedAmount = new BN(lock.lockedAmount).mul(new BN('1.2'))
     }
   }
+  return lockedEventList
 }
 
 function parseLockedValue(lockedEventList: LockInfo[], priceDict: { [address: string]: BN }) {
@@ -108,7 +109,9 @@ function parseLockedValue(lockedEventList: LockInfo[], priceDict: { [address: st
     const address = lock.user
     const token = lock.ideaToken
     const price = priceDict[token]
-    const amount = lock.lockedAmount
+    const amount = new BN(lock.lockedAmount)
+    console.log("price" + price)
+    console.log("amount" + amount)
     const value = price.mul(amount)
     tvl = tvl.add(value)
     if (!valueDict[address]) {
@@ -118,16 +121,23 @@ function parseLockedValue(lockedEventList: LockInfo[], priceDict: { [address: st
     }
   }
   //FIX need to call database for price of IMO to get apy (decimal) in dollars
+  // may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
   const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl)
   let payoutDict: { [address: string]: BN } = {}
   for (const address in valueDict) {
     payoutDict[address] = valueDict[address].mul(apy).div(new BN(365))
+  }
   return {tvl, apy, valueDict, payoutDict}
 }
 
 function getTwapPrices(priceDict: { [address: string]: BN }) {
   const iterations = 0
-  let twapDict = JSON.parse(fs.readFileSync('twap-dict', 'utf8'))
+  let twapDict
+  if (iterations == 0) {
+    twapDict = priceDict
+  } else {
+    twapDict = JSON.parse(fs.readFileSync('twap-dict.json', 'utf8'))
+  }
   for (const token of Object.keys(twapDict)) {
     // computes new average price
     twapDict[token] = twapDict[token].mul(new BN(iterations)).add(priceDict[token]).div(new BN(iterations + 1))
@@ -139,28 +149,33 @@ function getTwapPrices(priceDict: { [address: string]: BN }) {
 async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: string, startBlock: number, endBlock: number) {
   // Fetch all InvestedState events
   const exchange = new web3.eth.Contract(IdeaTokenExchangeABI as any, exchangeAddress)
-  const existingTokens = fs.readFileSync('tokenList','utf8');
+  //Fix writing to json or ts
+  const existingTokens = fs.readFileSync('tokenList.json','utf8');
   const newTokens = await parseLocks(web3, vaultAddress, startBlock, endBlock)
-  const tokens = Array.from(new Set(newTokens.concat(existingTokens)))
+  const tokens = Array.from(new Set(newTokens.concat(JSON.parse(existingTokens))))
   // fix write
   fs.writeFileSync('TotalTokenList.json', JSON.stringify(tokens, null, 2))
 
-  const pastEvents = fs.readFileSync('tokenEventList','utf8');
+  const pastEvents = fs.readFileSync('tokenEventList.json','utf8');
   let allEvents = JSON.parse(pastEvents).concat(lockedEventList)
-  allEvents = weightLocked(allEvents)
+  allEvents = weighLocked(allEvents)
   // fix write
   fs.writeFileSync('totalTokenEventList.json', JSON.stringify(allEvents, null, 2))
-
+// fix migration of addresses from l1 to l2
   console.log(`\nParsing ${tokens.length} Token list`)
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
   bar.start(tokens.length, 0)
   let priceDict: { [address: string]: BN } = {}
   for (const token of tokens) {
-    // get token price 
-    // write dict of token address to price for that specific date
-    priceDict[token] = new BN((await exchange.methods.getCostForBuyingTokens(token, 1)) * .99)
+
+    //fix end of pricedict
+    console.log(token)
+    priceDict[token] = await exchange.methods.getCostForBuyingTokens(token, 1).call()
+    console.log(priceDict[token])
+    //priceDict[token] = new BN((await exchange.methods.getCostForBuyingTokens(token, 1).call()).then(console.log))// * .99)
     bar.increment()
   }
+
   const twapPrices = getTwapPrices(priceDict)
   const {tvl, apy, valueDict, payoutDict} = parseLockedValue(allEvents, twapPrices)
   const timestamp = (await web3.eth.getBlock(endBlock)).timestamp

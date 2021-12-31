@@ -162,15 +162,12 @@ function getPrice(supply: BN) {
 async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: string, startBlock: number, endBlock: number) {
   // Fetch all InvestedState events
   const exchange = new web3.eth.Contract(IdeaTokenExchangeABI as any, exchangeAddress)
-  //Fix writing to json or ts
-  const existingTokens = fs.readFileSync('tokenList.json','utf8');
+  const existingTokens = fs.readFileSync('tokenListAdjusted.json','utf8');
   const newTokens = await parseLocks(web3, vaultAddress, startBlock, endBlock)
   const tokens = Array.from(new Set(newTokens.concat(JSON.parse(existingTokens))))
   // fix write
   fs.writeFileSync('TotalTokenList.json', JSON.stringify(tokens, null, 2))
-
-  const pastEvents = fs.readFileSync('tokenEventList.json','utf8');
-  // fix why is user not being written
+  const pastEvents = fs.readFileSync('tokenEventListAdjusted.json','utf8');
   let allEvents = JSON.parse(pastEvents).concat(lockedEventList)
   allEvents = weighLocked(allEvents)
   // fix write

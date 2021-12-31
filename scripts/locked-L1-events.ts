@@ -75,9 +75,9 @@ async function run(config: Config) {
 }
 
 async function adjustForL2(marketID: number, tokenID: number) {
-  const { web3, vaultAddress, factoryAddress, startBlock, endBlock } = l2Config
+  const { web3, factoryAddress, } = l2Config
   const factory = new web3.eth.Contract(IdeaTokenFactoryABI as any, factoryAddress)
-  const ideaToken = (await factory.methods.getTokenAddress(marketID, tokenID).call()).ideaToken
+  const ideaToken = await factory.methods.getTokenInfo(marketID, tokenID).call()
   console.log(ideaToken)
   return ideaToken
 }
@@ -97,11 +97,12 @@ async function parseLocks(web3: Web3, vaultAddress: string, factoryAddress: stri
     const txReceipt = await web3.eth.getTransactionReceipt(tx)
     const user = web3.utils.toChecksumAddress(txReceipt.from)
     // get l2 config to get migrated addresses
-    const IDPair = await factory.methods.getTokenIDPairlockedEvent(lockedEvent.returnValues['ideaToken'])
+    const IDPair = await factory.methods.getTokenIDPair(lockedEvent.returnValues['ideaToken']).call()
+    console.log(IDPair)
     const l2Address = await adjustForL2(IDPair['marketID'], IDPair['tokenID'])
-    tokenList.push(l2Address)
+    tokenList.push(l2Address['ideaToken'])
     // read store a lock event struct that writes the details of the lock for later use
-    lockedEventList.push({ideaToken: l2Address, user: lockedEvent.returnValues['owner'], 
+    lockedEventList.push({ideaToken: l2Address['ideaToken'], user: lockedEvent.returnValues['owner'], 
       lockedAmount : lockedEvent.returnValues['lockedAmount'], lockedUntil: lockedEvent.returnValues['lockedUntil'], lockDuration: lockedEvent.returnValues['lockedDuration']})
     bar.increment()
   }

@@ -40,17 +40,22 @@ type LockInfo = {
 
 
 const TOTAL_PAYOUT = new BN('10000000').mul(new BN('10').pow(new BN('18')))
+const BASE_COST = new BN('100000000000000000')
+const PRICE_RISE = new BN('100000000000000')
+const HATCH_TOKENS = new BN('1000000000000000000000')
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
+//fix startblock comes from file
 let lastBlockChecked = l2Config.startBlock
 let tokenList: string[] = []
 let lockedEventList: LockInfo[] = []
+// locked event list comes from file
 
 async function main() {
   // const lastBlockCHecked = js read file dict["lastBlockCHecked"]
   // const lockedTokenList = js read fine dict["lockedTokenList"]
   // creat a new dict with new values at respective places and rewrite file w new dict
-  
+
   // run script initaially just to get L1 token addresses on the first day. then remove from here
   await run(l2Config)
 
@@ -83,7 +88,7 @@ async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, 
   for (const lockedEvent of lockedEvents) {
     tokenList.push(lockedEvent.returnValues['ideaToken'])
     // read store a lock event struct that writes the details of the lock for later use
-    lockedEventList.push({ideaToken: lockedEvent.returnValues['ideaToken'], user: lockedEvent.returnValues['user'], 
+    lockedEventList.push({ideaToken: lockedEvent.returnValues['ideaToken'], user: lockedEvent.returnValues['owner'], 
       lockedAmount : lockedEvent.returnValues['lockedAmount'], lockedUntil: lockedEvent.returnValues['lockedUntil'], lockDuration: lockedEvent.returnValues['lockedDuration']})
     bar.increment()
   }
@@ -120,7 +125,7 @@ function parseLockedValue(lockedEventList: LockInfo[], priceDict: { [address: st
       valueDict[address] = valueDict[address].add(value)
     }
   }
-  //FIX need to call database for price of IMO to get apy (decimal) in dollars
+  // FIX need to call database for price of IMO to get apy (decimal) in dollars
   // may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
   const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl)
   let payoutDict: { [address: string]: BN } = {}
@@ -146,6 +151,14 @@ function getTwapPrices(priceDict: { [address: string]: BN }) {
   return twapDict
 }
 
+function getPrice(supply: BN) {
+  if (supply.lte(HATCH_TOKENS)) {
+    return BASE_COST
+  }
+  const price = PRICE_RISE.mul(supply.sub(HATCH_TOKENS)).add(BASE_COST)
+  return price
+}
+
 async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: string, startBlock: number, endBlock: number) {
   // Fetch all InvestedState events
   const exchange = new web3.eth.Contract(IdeaTokenExchangeABI as any, exchangeAddress)
@@ -157,33 +170,37 @@ async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: s
   fs.writeFileSync('TotalTokenList.json', JSON.stringify(tokens, null, 2))
 
   const pastEvents = fs.readFileSync('tokenEventList.json','utf8');
+  // fix why is user not being written
   let allEvents = JSON.parse(pastEvents).concat(lockedEventList)
   allEvents = weighLocked(allEvents)
   // fix write
   fs.writeFileSync('totalTokenEventList.json', JSON.stringify(allEvents, null, 2))
-// fix migration of addresses from l1 to l2
+  // fix migration of addresses from l1 to l2
   console.log(`\nParsing ${tokens.length} Token list`)
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
   bar.start(tokens.length, 0)
   let priceDict: { [address: string]: BN } = {}
   for (const token of tokens) {
-
     //fix end of pricedict
-    console.log(token)
-    priceDict[token] = await exchange.methods.getCostForBuyingTokens(token, 1).call()
-    console.log(priceDict[token])
-    //priceDict[token] = new BN((await exchange.methods.getCostForBuyingTokens(token, 1).call()).then(console.log))// * .99)
+    const callableToken = new web3.eth.Contract(ERC20ABI as any, token)
+    console.log("\ntoken: " + token)
+    const supply = await callableToken.methods.totalSupply().call()
+    console.log("supply: " + supply)
+    //fix token addresses if from L1
+    priceDict[token] = getPrice(new BN(supply))
+    console.log("price: " + priceDict[token])
     bar.increment()
   }
 
   const twapPrices = getTwapPrices(priceDict)
-  const {tvl, apy, valueDict, payoutDict} = parseLockedValue(allEvents, twapPrices)
+  const { tvl, apy, valueDict, payoutDict } = parseLockedValue(allEvents, twapPrices)
   const timestamp = (await web3.eth.getBlock(endBlock)).timestamp
   fs.writeFileSync('priceDict-' + timestamp + '.json', JSON.stringify(priceDict, null, 2))
   fs.writeFileSync('valueDict-' + timestamp + '.json', JSON.stringify(valueDict, null, 2))
   fs.writeFileSync('payoutDict-' + timestamp + '.json', JSON.stringify(payoutDict, null, 2))
   fs.writeFileSync('tvl-' + timestamp + '.json', JSON.stringify(tvl, null, 2))
   fs.writeFileSync('apy-' + timestamp + '.json', JSON.stringify(apy, null, 2))
+  //fix last block
   // write priceDict to file for that date
   bar.stop()
   //write new file with new tokens and endblock

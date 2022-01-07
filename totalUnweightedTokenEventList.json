@@ -2,1127 +2,1127 @@
   {
     "ideaToken": "0xf1d242dc7Ad44087e764e733a689D38476D3E4Ba",
     "user": "0x64ebE7Ae3FacB0359e23e3fEF2c48EbafCf4E17a",
-    "lockedAmount": "68155a43676e00000",
+    "lockedAmount": "100000000000000000000",
     "lockedUntil": "1644965950",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc348ed904864B5be233aceBD3A8D45a2D637c12f",
     "user": "0x64DcbEaD3B25B94c1C07158c8a6aD6517B95513E",
-    "lockedAmount": "821ab0d44149800000",
+    "lockedAmount": "2000000000000000000000",
     "lockedUntil": "1644974706",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xEa3455Dc62B441E9A2A46dd27015994A94DB30C9",
     "user": "0x4dA2e85D64bEcE663CCaB06E89B970b6b077f22F",
-    "lockedAmount": "d02ab486cedc00000",
+    "lockedAmount": "200000000000000000000",
     "lockedUntil": "1644976946",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x3a2De93d27d10F3aC47c944d2DCdA13340CDEd33",
     "user": "0xb3522064694Ac9870Dbf00eEBC2712762193Bb64",
-    "lockedAmount": "4e1003b28d92800000",
+    "lockedAmount": "1200000000000000000000",
     "lockedUntil": "1644979715",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x108e934bb337672e5e7b7F2e58cCA35c2718dB3e",
     "user": "0xb3522064694Ac9870Dbf00eEBC2712762193Bb64",
-    "lockedAmount": "820a09929ce7080000",
+    "lockedAmount": "1999000000000000000000",
     "lockedUntil": "1644979715",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x6DfF9010aE9A43c2eC1AFecBb13D3515B7F4292f",
     "user": "0xb5EDbE540411B60139BCD01A087BdCf52a1dE120",
-    "lockedAmount": "a7a2a98555f001fd0a",
+    "lockedAmount": "2576939422015707435742",
     "lockedUntil": "1644982220",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x372f2eAd244F01fD4FFD8444c9085769e0299338",
     "user": "0xc478328547992b8F5970ec4208C8d0FE2C7cef0b",
-    "lockedAmount": "80cd9fb36998200000",
+    "lockedAmount": "1980000000000000000000",
     "lockedUntil": "1645001331",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x6618119cC38A72B5D37f2f33dDD41c42681a52F5",
     "user": "0xc478328547992b8F5970ec4208C8d0FE2C7cef0b",
-    "lockedAmount": "80cd9fb36998200000",
+    "lockedAmount": "1980000000000000000000",
     "lockedUntil": "1645001482",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xB76b7ac27db45Aa0915b97410bd3908265618Bbc",
     "user": "0xc478328547992b8F5970ec4208C8d0FE2C7cef0b",
-    "lockedAmount": "80cd9fb36998200000",
+    "lockedAmount": "1980000000000000000000",
     "lockedUntil": "1645002126",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x80A3080634e0E6c45e1Eb42526acE19e7c30EC0A",
     "user": "0xc478328547992b8F5970ec4208C8d0FE2C7cef0b",
-    "lockedAmount": "821ab0d44149800000",
+    "lockedAmount": "2000000000000000000000",
     "lockedUntil": "1645002249",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xa8711aE1931088f4C19bEDD4bE3b83e5A39bE954",
     "user": "0x6C65fB326e7734Ba5508b5d043718288b43b9ed9",
-    "lockedAmount": "5b12aefafa80400000",
+    "lockedAmount": "1400000000000000000000",
     "lockedUntil": "1645004844",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xaaa5444133039fb84372231C385f709fb0f54936",
     "user": "0xdbF14da8949D157B57acb79f6EEE62412b210900",
-    "lockedAmount": "1d460162f516f00000",
+    "lockedAmount": "450000000000000000000",
     "lockedUntil": "1645027986",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x1215B93306c068570DE1EF6efB906d6F9a935d10",
     "user": "0xF59F2bE37AB7c64e809a20244147E35Cc706d1A1",
-    "lockedAmount": "821ab0d44149800000",
+    "lockedAmount": "2000000000000000000000",
     "lockedUntil": "1645103045",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x80A3080634e0E6c45e1Eb42526acE19e7c30EC0A",
     "user": "0x98c1d8A5cd2e6FA559ba6ae0680B388b799AC231",
-    "lockedAmount": "a10107a043fe280000",
+    "lockedAmount": "2475000000000000000000",
     "lockedUntil": "1645144798",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x8D0D5C54C575bAaa864AF3779181267Ef6f32E3E",
     "user": "0x98c1d8A5cd2e6FA559ba6ae0680B388b799AC231",
-    "lockedAmount": "c328093e61ee400000",
+    "lockedAmount": "3000000000000000000000",
     "lockedUntil": "1645179465",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x23919754ADeeB6E27a700bF7A5D42ef6f38489CC",
     "user": "0x6C65fB326e7734Ba5508b5d043718288b43b9ed9",
-    "lockedAmount": "6194049f30f7200000",
+    "lockedAmount": "1500000000000000000000",
     "lockedUntil": "1645434614",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x33A70A1c4c080e31a14Aa57A9d67B2066d679962",
     "user": "0x7dd4640271b84f7D023946AFB2b85E7964C21FA1",
-    "lockedAmount": "a2a15d09519be00000",
+    "lockedAmount": "2500000000000000000000",
     "lockedUntil": "1645458876",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x8B69bc882f2FF238627147F406c9FF5f69A40414",
     "user": "0x7dd4640271b84f7D023946AFB2b85E7964C21FA1",
-    "lockedAmount": "410d586a20a4c00000",
+    "lockedAmount": "1000000000000000000000",
     "lockedUntil": "1645459567",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x33CB82131Ce7A9A48185b9f687BD28D9ecCB8cA6",
     "user": "0x7dd4640271b84f7D023946AFB2b85E7964C21FA1",
-    "lockedAmount": "a2a15d09519be00000",
+    "lockedAmount": "2500000000000000000000",
     "lockedUntil": "1645460623",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xFf248F2a2C77FDA5F57516128B250534fb8543b3",
     "user": "0x8aC397Dc99ec76909f11C47Bd3a74Ebe5D3662Ac",
-    "lockedAmount": "410d586a20a4c00000",
+    "lockedAmount": "1000000000000000000000",
     "lockedUntil": "1645580753",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x8CAEff3Fe233f4B1CEc4c179051DB2f818112cB0",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "410d586a20a4c00000",
+    "lockedAmount": "1000000000000000000000",
     "lockedUntil": "1645843854",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "821ab0d44149800000",
+    "lockedAmount": "2000000000000000000000",
     "lockedUntil": "1645845878",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "3e318a8d1c3b32ca80",
+    "lockedAmount": "956056627814190437227",
     "lockedUntil": "1645847100",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "a587744294936a996",
+    "lockedAmount": "159035066232312008019",
     "lockedUntil": "1645907986",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "64735176eeb5918be3",
+    "lockedAmount": "1544153300771709121683",
     "lockedUntil": "1645909158",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xb508BD41b0A8e4D36F2576762a31C8D7AB0B97ee",
     "user": "0x6b2844721180CB80dD58B1B4b0F3009d26093730",
-    "lockedAmount": "3e0fc865b651bfb5aa",
+    "lockedAmount": "954029502758027685049",
     "lockedUntil": "1645919399",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "7e322f54f2c57ef064",
+    "lockedAmount": "1939921629762397958910",
     "lockedUntil": "1645930070",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "2cfad6fb81a08f985f",
+    "lockedAmount": "691443041609901211386",
     "lockedUntil": "1646001463",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "47a323b4814640d5b1",
+    "lockedAmount": "1101228555960889771881",
     "lockedUntil": "1646100231",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "5a7ed2e6a144006f58",
+    "lockedAmount": "1391121322340044004554",
     "lockedUntil": "1646111246",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "3e741c75d20fe164f3",
+    "lockedAmount": "960054020269008125643",
     "lockedUntil": "1646113526",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "35870fae8446043a5b",
+    "lockedAmount": "822841354257925637623",
     "lockedUntil": "1646119118",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "36de66988eb60d31e0",
+    "lockedAmount": "843458203369222810000",
     "lockedUntil": "1646177455",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "43cff19ff8a6c88c48",
+    "lockedAmount": "1042429821886730979900",
     "lockedUntil": "1646179361",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "258d376fc3f63ffd58",
+    "lockedAmount": "577254379581467524554",
     "lockedUntil": "1646270584",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "6235042658d5dc8c37",
+    "lockedAmount": "1509667616475366716633",
     "lockedUntil": "1646280535",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "258a234827fb2b4e86",
+    "lockedAmount": "577069508054355984752",
     "lockedUntil": "1646281252",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xB678189c0b39C069c6B4b67A7381A2900F6d1BAe",
     "user": "0x924b575917F822E32e88b7E7171Fe0C00C70f401",
-    "lockedAmount": "368380e01a54d00000",
+    "lockedAmount": "838000000000000000000",
     "lockedUntil": "1646904997",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x0065F3C61d9a028312c7B53B88B9f1a84475fd66",
     "user": "0x19E284ff4701C93F0Cc20B4b42d99d977b76F612",
-    "lockedAmount": "410d586a20a4c00000",
+    "lockedAmount": "1000000000000000000000",
     "lockedUntil": "1647608902",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xf4fa6af3e2d1147B1341A8e732E1f0CE6B989D17",
     "user": "0x4059E94F431b2C48373c3CF962b257b7A4b1dc63",
-    "lockedAmount": "a2a15d09519be00000",
+    "lockedAmount": "2500000000000000000000",
     "lockedUntil": "1647733277",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x53762a68EeC2768452b8DAa14e481C10fAf5F0Ea",
     "user": "0xF2ab0e7e132E686666B7e7125797fED594cA89AB",
-    "lockedAmount": "68155a43676e00000",
+    "lockedAmount": "100000000000000000000",
     "lockedUntil": "1647752654",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x5E1A6378597bED922DB618a41149c569e64602b9",
     "user": "0x4DAF333c0BFbea63A78D2c53E32BfD48Df54A09a",
-    "lockedAmount": "410d586a20a4c00000",
+    "lockedAmount": "1000000000000000000000",
     "lockedUntil": "1647760778",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x5E1A6378597bED922DB618a41149c569e64602b9",
     "user": "0xFE92f48d7FcF9d841C58D3496ad2E00642b047eD",
-    "lockedAmount": "4066cfd9b4cc100000",
+    "lockedAmount": "990000000000000000000",
     "lockedUntil": "1647762251",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
     "user": "0x0D36F52047E29919227701BA072477578bDb08C1",
-    "lockedAmount": "9c2007651b2500000",
+    "lockedAmount": "150000000000000000000",
     "lockedUntil": "1647763105",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
     "user": "0x8bEa3b538d093AC314fb2b9be133607429705d1a",
-    "lockedAmount": "163a2e5a8fc1b3ef27",
+    "lockedAmount": "341683964581846053366",
     "lockedUntil": "1647794537",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
     "user": "0x3beEdd0A668e9b073a78eaeEea710130E811beAB",
-    "lockedAmount": "340aad21b3b700000",
+    "lockedAmount": "50000000000000000000",
     "lockedUntil": "1647794816",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x12409E63Fbd9188003b480dfdFFF1B3Cc5d14BC5",
     "user": "0x726022a9fe1322fA9590FB244b8164936bB00489",
-    "lockedAmount": "4066cfd9b4cc100000",
+    "lockedAmount": "990000000000000000000",
     "lockedUntil": "1647904127",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x5E1A6378597bED922DB618a41149c569e64602b9",
     "user": "0x589f24CC3BbA5bF077009C22C25BF6829A588E53",
-    "lockedAmount": "138400eca364a00000",
+    "lockedAmount": "300000000000000000000",
     "lockedUntil": "1647952948",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x5E1A6378597bED922DB618a41149c569e64602b9",
     "user": "0x908E8E8084d660f8f9054AA8Ad1B31380d04B08F",
-    "lockedAmount": "4066cfd9b4cc100000",
+    "lockedAmount": "990000000000000000000",
     "lockedUntil": "1648026684",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xaa2aA4120f71A5595b408c5E067543F1B642fC85",
     "user": "0xe1D29d0a39962a9a8d2A297ebe82e166F8b8EC18",
-    "lockedAmount": "18650127cc3dc800000",
+    "lockedAmount": "6000000000000000000000",
     "lockedUntil": "1648079536",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xe5461986Fb5252152724bf4C10C7c21566e87B90",
     "user": "0x7A2BBe4c66f8fabD8cC1EdD2F985216dC70D0870",
-    "lockedAmount": "39f6217722b7a80000",
+    "lockedAmount": "891000000000000000000",
     "lockedUntil": "1648148444",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
     "user": "0xE5057f7826262083038D9f60d07Cb6799e3828DF",
-    "lockedAmount": "53444835ec580000",
+    "lockedAmount": "5000000000000000000",
     "lockedUntil": "1648358880",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x38a7b54bb60F8b0280F9590E982EB95482F28424",
     "user": "0x1B32fc9b7fb1D32Cb48D93A3fF22B8850acf33B1",
-    "lockedAmount": "6194049f30f7200000",
+    "lockedAmount": "1500000000000000000000",
     "lockedUntil": "1648384328",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xfcDDF590A9f5c404dD17934ab982db4c9e495A67",
     "user": "0x1B32fc9b7fb1D32Cb48D93A3fF22B8850acf33B1",
-    "lockedAmount": "609a37c68f32180000",
+    "lockedAmount": "1485000000000000000000",
     "lockedUntil": "1648384888",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x35fa424700385fC547ebA676537Ea7c41863137A",
     "user": "0x1B32fc9b7fb1D32Cb48D93A3fF22B8850acf33B1",
-    "lockedAmount": "410d586a20a4c00000",
+    "lockedAmount": "1000000000000000000000",
     "lockedUntil": "1648385039",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xfcDDF590A9f5c404dD17934ab982db4c9e495A67",
     "user": "0x09D57F361f794D150C04443A7B6e369120DC2bea",
-    "lockedAmount": "410d586a20a4c00000",
+    "lockedAmount": "1000000000000000000000",
     "lockedUntil": "1648392232",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xfcDDF590A9f5c404dD17934ab982db4c9e495A67",
     "user": "0x0efEe0F9899d3175De1D46e162Ce0aA5d8Cc3bD7",
-    "lockedAmount": "410d586a20a4c00000",
+    "lockedAmount": "1000000000000000000000",
     "lockedUntil": "1648393191",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xC114d2E9a42564da5B881Cf420Ac7A33Bf78Da38",
     "user": "0x924b575917F822E32e88b7E7171Fe0C00C70f401",
-    "lockedAmount": "111380cf0ef80c00000",
+    "lockedAmount": "4200000000000000000000",
     "lockedUntil": "1651888437",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x77059d37bD138C0117B9100660a35E9c3995997e",
     "user": "0x5BE3a7B75Fe8A5E0ca49C4e059AC91f2B9175a8D",
-    "lockedAmount": "4e1003b28d92800000",
+    "lockedAmount": "1200000000000000000000",
     "lockedUntil": "1651925680",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x9b99432D0146B2852595313E6308aA576a79C19B",
     "user": "0x4B38c372b6f60dcC892726D5ce6bfd3E4Ec1DA8C",
-    "lockedAmount": "11e3ab8395c6e800000",
+    "lockedAmount": "4400000000000000000000",
     "lockedUntil": "1653442255",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x281DC7C530F85434BfA69d4a6dDc7488E9f2AE5C",
     "user": "0x5BE3a7B75Fe8A5E0ca49C4e059AC91f2B9175a8D",
-    "lockedAmount": "203367ecda66080000",
+    "lockedAmount": "495000000000000000000",
     "lockedUntil": "1654090209",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x4329Aa62aeAA9dAfE428E7ab9f8129012A4e4761",
     "user": "0x5d32A547e89a021518Dc547435B0DD4291D639A5",
-    "lockedAmount": "670ae629214680000",
+    "lockedAmount": "99000000000000000000",
     "lockedUntil": "1654106215",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x4329Aa62aeAA9dAfE428E7ab9f8129012A4e4761",
     "user": "0x5d32A547e89a021518Dc547435B0DD4291D639A5",
-    "lockedAmount": "410d586a20a4c00000",
+    "lockedAmount": "1000000000000000000000",
     "lockedUntil": "1654108130",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x281DC7C530F85434BfA69d4a6dDc7488E9f2AE5C",
     "user": "0x81fC7CCb7dE2610b62280AB9f19399fF03a8d2bf",
-    "lockedAmount": "11e3ab8395c6e800000",
+    "lockedAmount": "4400000000000000000000",
     "lockedUntil": "1654266018",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x84D7DCB7856d1e33cCC2189154933Cb620c3DACB",
     "user": "0xe438F69db3C023E2AD8Bc30b692BdF818aBc6beB",
-    "lockedAmount": "68155a43676e00000",
+    "lockedAmount": "100000000000000000000",
     "lockedUntil": "1654402263",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x281DC7C530F85434BfA69d4a6dDc7488E9f2AE5C",
     "user": "0x59244e6EBec541C0433Ffb18F9dC27A91509fb77",
-    "lockedAmount": "68155a43676e00000",
+    "lockedAmount": "100000000000000000000",
     "lockedUntil": "1654413864",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x489E6d06e8BD3763b02e83FEbe3f84951390E85F",
     "user": "0xFf02d69ff36b6415E7E11bFcFd4DAe0267E40814",
-    "lockedAmount": "19d360cbecb4180000",
+    "lockedAmount": "397000000000000000000",
     "lockedUntil": "1654453719",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x64F355AD14a92513de016397511DC10502c6A9e5",
     "user": "0x31e2a4a31B8563B8d238eC086daE9B75a00D9E74",
-    "lockedAmount": "11ce0c6bef454ba0000",
+    "lockedAmount": "4379226800000000000000",
     "lockedUntil": "1654871642",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x7420fA58bA44E1141d5E9ADB6903BE549f7cE0b5",
-    "lockedAmount": "837e97bc0f4618000",
+    "lockedAmount": "126335700000000000000",
     "lockedUntil": "1655209636",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x7AdD63BD7ddD2b1caE71C72ae20ECfd6e781e442",
     "user": "0xD010bbeD8d43D315a785eA865DFBc837d9191821",
-    "lockedAmount": "4066cf6c911eb08000",
+    "lockedAmount": "989999900000000000000",
     "lockedUntil": "1656090852",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x44427338855beF2170F53379138bd9af8c88e69C",
     "user": "0xadcf51606A8307F74B3109b1A0C619DB4d950624",
-    "lockedAmount": "3385731490a340000",
+    "lockedAmount": "49500000000000000000",
     "lockedUntil": "1657061705",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x53762a68EeC2768452b8DAa14e481C10fAf5F0Ea",
     "user": "0x819379d061795c44dd5Ec854e64bEAC3F1842158",
-    "lockedAmount": "2806fb24428c0b5000",
+    "lockedAmount": "615310665500000000000",
     "lockedUntil": "1659303519",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x9eBfd69aaFfdFB1fbD76F359925E9d6d3980e656",
     "user": "0x44e9E84cC5E53270e38EAE09120c24A0eABC3E40",
-    "lockedAmount": "5b4d82310ff105e800",
+    "lockedAmount": "1403532325950000000000",
     "lockedUntil": "1659501601",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xdf2Eec7c69DAE799d5fB45a2De9BFB0E682D59C5",
     "user": "0x6F3bA8A845D18D32bE6985650E449d7c29926F7F",
-    "lockedAmount": "94c514edd31cfed200",
+    "lockedAmount": "2286932799937500000000",
     "lockedUntil": "1661815564",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x0e5640e88a011FF76c6D6951AC102f48031Bff51",
     "user": "0xE9B3c292904114e6e6F04a363Ae4c0F800f3236D",
-    "lockedAmount": "1a60ff5ac0f8800",
+    "lockedAmount": "98999990000000000",
     "lockedUntil": "1664903464",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x0e5640e88a011FF76c6D6951AC102f48031Bff51",
     "user": "0xE9B3c292904114e6e6F04a363Ae4c0F800f3236D",
-    "lockedAmount": "1aa535d3d0c0000",
+    "lockedAmount": "100000000000000000",
     "lockedUntil": "1664905306",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xb42328c8B5725827DCE1B9D5A6B2bdEc4c717e12",
     "user": "0xF59F2bE37AB7c64e809a20244147E35Cc706d1A1",
-    "lockedAmount": "8148a2203b2bcb5000",
+    "lockedAmount": "1987386472220000000000",
     "lockedUntil": "1664926554",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xEa0b0ae360D2b3E28c66D6F0EEE4C1642F75E844",
     "user": "0x54840Cba1B1b54128Cd19B2CE0384A4E2eEe9A17",
-    "lockedAmount": "425236f3349e25d000",
+    "lockedAmount": "1019507748860000000000",
     "lockedUntil": "1664935370",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xB660775E92019A3C2Dca9665c766084261F06F32",
     "user": "0x04274bf382B4A3262721f2EC8309Af9c8DdA790b",
-    "lockedAmount": "519cc4006defc7a000",
+    "lockedAmount": "1254568686840000000000",
     "lockedUntil": "1664936605",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x1557d4A0b2a25d63c46bBC7028Fa8d9b3EE7d22a",
     "user": "0x69e30ad5d19d34E6fC43EAC10Bfb2D816d3c78A1",
-    "lockedAmount": "410bae16c367b40000",
+    "lockedAmount": "999900000000000000000",
     "lockedUntil": "1664937365",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
     "user": "0x9a50A078d80F36E38EDfAE85AfFa2B8aB458e2C9",
-    "lockedAmount": "107c9fb4a92a0000",
+    "lockedAmount": "990000000000000000",
     "lockedUntil": "1664959219",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x55e95bb76fA749F911f4F97F12da69B1e2379160",
     "user": "0xfe828eE52F00e2E928Fbd6060eD9A0322fd886E7",
-    "lockedAmount": "1c8788642cf0b380000",
+    "lockedAmount": "7017000000000000000000",
     "lockedUntil": "1664972588",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x83B0874194914cFe761fE55FF125BdFCEa66327F",
     "user": "0xF08E242722aF03F5575A50E8bFbA0c56EFF6D134",
-    "lockedAmount": "1053532b0a93f800",
+    "lockedAmount": "980312810000000000",
     "lockedUntil": "1665005252",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x5a1B8B2Fcb3ec3fCbc322B9C30c9759b9318adD1",
     "user": "0x6C72dd59A8b68C6338665eFa6b28cc8C5F596fbA",
-    "lockedAmount": "68155a43676e00000",
+    "lockedAmount": "100000000000000000000",
     "lockedUntil": "1665008202",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc765E3BdE195b253F16a5B7a7Fbbb4c402a0882E",
     "user": "0x2526A6EfEEF588BdfB0d572d8C373Dd71ef4e4f4",
-    "lockedAmount": "2086ac351052600000",
+    "lockedAmount": "500000000000000000000",
     "lockedUntil": "1665008328",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x53762a68EeC2768452b8DAa14e481C10fAf5F0Ea",
     "user": "0x10C8e4835d3522f5463Fb8256d56A636B06D04d7",
-    "lockedAmount": "13f36c15cfef4e000",
+    "lockedAmount": "19168153960000000000",
     "lockedUntil": "1665016767",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x443d6008ef1a266AB7641AA636DFC45D986e513a",
     "user": "0xf8Fd0B9180d0792B3891b3002124881A73A48f7e",
-    "lockedAmount": "278800ee0e103b800",
+    "lockedAmount": "37980370490000000000",
     "lockedUntil": "1665046035",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x55e95bb76fA749F911f4F97F12da69B1e2379160",
     "user": "0x5833869fdEB4D371b854D7474F5F84B43320FD05",
-    "lockedAmount": "2b47233a3c0e40000",
+    "lockedAmount": "41580000000000000000",
     "lockedUntil": "1665090783",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xB40fE3d79B77bbC1f8Da3934eFF3c2476d8A4a3b",
     "user": "0x68d36DcBDD7Bbf206e27134F28103abE7cf972df",
-    "lockedAmount": "374845147f8097800",
+    "lockedAmount": "53113464330000000000",
     "lockedUntil": "1665095243",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xDD0D2B02Ac44D2C083Fe8ae9f091A2436cDc8C82",
     "user": "0x68d36DcBDD7Bbf206e27134F28103abE7cf972df",
-    "lockedAmount": "670ae628f49268800",
+    "lockedAmount": "98999999990000000000",
     "lockedUntil": "1665095717",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x20BDc45b00F312Da688E74c101cB993B80789d1e",
     "user": "0x25bdFF8dB8d80971935A7f38A0CF31DeC62f7696",
-    "lockedAmount": "c328093e61ee400000",
+    "lockedAmount": "3000000000000000000000",
     "lockedUntil": "1665096404",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x19Ff497af227Ab059B925B74403D9Ab9e2EbFEA0",
     "user": "0x90d02feb54b4b79a4c76d5251988CAC63Bf9972E",
-    "lockedAmount": "41afbd6dda995f1000",
+    "lockedAmount": "1009751469420000000000",
     "lockedUntil": "1665174663",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x0881AA9dC7AACAAF57071bA2B1d96692086813bE",
     "user": "0xEDF61D775d4330c1FDE32b95d4C2a165471b425B",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1665178585",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xF2fbFE6D7f3b057E8f2C2d832D72F7f8c10407Ea",
     "user": "0x279ca597de85Db89B699B4E38F6cB6D382b21a54",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1665178810",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xC35850Ce7b070BAAB6a5e986Bb565FdB6C002559",
     "user": "0x70dBB65C825D8562EA227a8f800ba0518Fc0dE51",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1665178991",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x4bd1e4b3Ac4982013Fa3189A73e8F71222A850EE",
     "user": "0xF05BB299505Bc4E9c7B132c44D8c30bB68e7efFf",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1665179281",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xE613146358A49ef549E78474cc56eA6Bf2B5E1bC",
     "user": "0x1f09325cE7C37823Ba34BD4538D8e66928d9dc43",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1665179421",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xb72a3EBdC6D4B44449f39D1Bb4538cE924208F0d",
     "user": "0x3343eD3f1e3d95455D6244d365b06B7F10aA1b9f",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1665179501",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x75139ef0e44420aa3573382C5580abB16506E90D",
     "user": "0xE44116540498C8018995B087d09e7ac2E2065783",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1665179688",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x5ca87a2813E14bD1886CA26880b38E9e3fD32b21",
     "user": "0xdc2aCF4A1E8591c5683A01b6CCa2570D8D573450",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1665179862",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xdb8D1e9350531449CAB635365Ac188D5C18a3eA3",
     "user": "0x9430c889f83B819f772C7159bDa19AD08B7776B6",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1665179928",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x7DA483EE1E3974737F7905735D62D16819dA90E5",
     "user": "0xea5aFbf054701eb85c6Ac5d4E137FFCA1A0573D1",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1665180059",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
     "user": "0x7d268E4EE18330Fd3CcC81371944dABDDbaFdE55",
-    "lockedAmount": "69a095a56dc66800",
+    "lockedAmount": "6342706590000000000",
     "lockedUntil": "1665184104",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc3988F64324b797b314e21b8F8f52C1Cb0f8Fd1E",
     "user": "0x27E31F09BC0c02499afC765b62658ea32c781AB7",
-    "lockedAmount": "b9bdc4cfb5a8e000",
+    "lockedAmount": "11153391720000000000",
     "lockedUntil": "1665184221",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x83B0874194914cFe761fE55FF125BdFCEa66327F",
     "user": "0x9832071937Ba2Aa85F67C975FD1CA12970009d56",
-    "lockedAmount": "bbe699b03fd21000",
+    "lockedAmount": "11283065260000000000",
     "lockedUntil": "1665184221",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x14bb7f397657ab9E3e9B99bbC8A690c1EA8089Be",
     "user": "0xF01Dd7F4268F9Ffa659cf7991cc4f10C3DBD50d3",
-    "lockedAmount": "148543d5c0a1cc000",
+    "lockedAmount": "19715501840000000000",
     "lockedUntil": "1665184277",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xA6F6b2c3fe95aCf587772EaDE4b5F0aEA61C7b01",
     "user": "0x71a08D95bf2902Df72006662074481A24a25386B",
-    "lockedAmount": "16551436852e16800",
+    "lockedAmount": "21456195550000000000",
     "lockedUntil": "1665184405",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xd7B74FC0C603597542688b1a208D38516e233029",
     "user": "0x2c6dab11F48CF60ec5362714D003f789E2819662",
-    "lockedAmount": "16ded465b78656000",
+    "lockedAmount": "21973173960000000000",
     "lockedUntil": "1665184405",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xddA0665a2194010B9095eC4207cD1B84188Ce88d",
     "user": "0x2410C63Fe20942cd1E457af1B484A18562Ae625e",
-    "lockedAmount": "16ded465b78656000",
+    "lockedAmount": "21973173960000000000",
     "lockedUntil": "1665184504",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x19Ff497af227Ab059B925B74403D9Ab9e2EbFEA0",
     "user": "0x31EDAB5931FC97EF4b7f712ecEE5f3a742DC076d",
-    "lockedAmount": "bb634a554c520c000",
+    "lockedAmount": "180036237840000000000",
     "lockedUntil": "1665184574",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x9266e1fa2FDc0d960B524aC06F0ee2f1aB0f3621",
     "user": "0xA9531A54d8e2f1fDa3149e9f92b8Ea89B17492ef",
-    "lockedAmount": "24d10052b6ac5b800",
+    "lockedAmount": "35372026810000000000",
     "lockedUntil": "1665184706",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x6DfF9010aE9A43c2eC1AFecBb13D3515B7F4292f",
     "user": "0xD2a5c8dA31537b068f509BDEdbB0344fC34E0571",
-    "lockedAmount": "28b6690728e153800",
+    "lockedAmount": "39115302490000000000",
     "lockedUntil": "1665184706",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xf4fa6af3e2d1147B1341A8e732E1f0CE6B989D17",
     "user": "0x2387F007bBA6E1EAb6dB87230301789041Ea3b84",
-    "lockedAmount": "1742dcce235e44800",
+    "lockedAmount": "22348597190000000000",
     "lockedUntil": "1665184814",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xF1332DF3f4195E31AAAc2FBD9BBEC204817202F0",
     "user": "0xc665471D0609ee54eCe0FDC49A7cba08Eb2f9e93",
-    "lockedAmount": "ce15cc5215d8e8800",
+    "lockedAmount": "197999999990000000000",
     "lockedUntil": "1665184867",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xE613146358A49ef549E78474cc56eA6Bf2B5E1bC",
     "user": "0x0BB7981c2e0A6eA27721f8F3507fe004a9C49D23",
-    "lockedAmount": "be80ae0693eb9b000",
+    "lockedAmount": "183028840100000000000",
     "lockedUntil": "1665184974",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xdb8D1e9350531449CAB635365Ac188D5C18a3eA3",
     "user": "0x19f49bDF78259154671E0e0D3E493057Fe459AAC",
-    "lockedAmount": "be80ae0693eb9b000",
+    "lockedAmount": "183028840100000000000",
     "lockedUntil": "1665185028",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xD98b070B1478EAEe386DbcD49F0CF0f645297009",
     "user": "0xe81C2226855a709AC464eA0380CBF36048f318b0",
-    "lockedAmount": "2737ef57d73455800",
+    "lockedAmount": "37679872690000000000",
     "lockedUntil": "1665185081",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x19Ff497af227Ab059B925B74403D9Ab9e2EbFEA0",
     "user": "0x90d02feb54b4b79a4c76d5251988CAC63Bf9972E",
-    "lockedAmount": "633a786d291d196800",
+    "lockedAmount": "1525367417310000000000",
     "lockedUntil": "1665185252",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x19Ff497af227Ab059B925B74403D9Ab9e2EbFEA0",
     "user": "0x7C1C54F3F8AB1A4B44b1861E719229C9eC948268",
-    "lockedAmount": "8d51995afb1585000",
+    "lockedAmount": "135774517980000000000",
     "lockedUntil": "1665185947",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x0f422a74c80756F22b46859E516ed1985Dde0797",
     "user": "0xE258CFdA93e8bD42B95fd91f09F73f44C18B9A44",
-    "lockedAmount": "146b3e20b73247000",
+    "lockedAmount": "19617840180000000000",
     "lockedUntil": "1665243762",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x83B0874194914cFe761fE55FF125BdFCEa66327F",
     "user": "0x93242bB2b8F429A21c8D194aD88e7c4745e395A1",
-    "lockedAmount": "1c2cb9492e6e9000",
+    "lockedAmount": "1691834380000000000",
     "lockedUntil": "1665323984",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x9D1fe53F80d18275633563C6a0cEA2B578820304",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "410bae16c367b40000",
+    "lockedAmount": "999900000000000000000",
     "lockedUntil": "1665709740",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x7A5BeA664b315075E3beAd94c7D43E58903Ae3f9",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "410bae16c367b40000",
+    "lockedAmount": "999900000000000000000",
     "lockedUntil": "1665709813",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x23919754ADeeB6E27a700bF7A5D42ef6f38489CC",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "1d08973165a5644800",
+    "lockedAmount": "446312163270000000000",
     "lockedUntil": "1665711708",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "212401d0ecbf70800",
+    "lockedAmount": "31840475990000000000",
     "lockedUntil": "1665712104",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x983949D81a3eC86E5C666Dd7328F78F9534530fe",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "153d7bc2228d021800",
+    "lockedAmount": "326509978050000000000",
     "lockedUntil": "1665713940",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x324d65348Ed10e9a5Cb9b909058fb025b7fec5d9",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "410bae16c367b40000",
+    "lockedAmount": "999900000000000000000",
     "lockedUntil": "1665884606",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x79D492a45D91Cb3CD894E76f334567b93e73E773",
     "user": "0x2e09EDaE705F9cEc7f65064B5da75D1A9Fc2C5Ac",
-    "lockedAmount": "20d84629e901ac0000",
+    "lockedAmount": "504900000000000000000",
     "lockedUntil": "1666140707",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xb98D3c7C373b284e5C99387F582EB50E7cB2C9F6",
     "user": "0xBC5eC594509eD050F4A53eEe85D92aF6d2529b56",
-    "lockedAmount": "700cbce3f79273a800",
+    "lockedAmount": "1722460996110000000000",
     "lockedUntil": "1666296269",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xa2C4Eed690b85396e292Bd14dC825F9F4dD4B1B1",
     "user": "0xCb30Cc9AbC2b3B4AA72A6f42C968D632D58547a2",
-    "lockedAmount": "9a61a86efe6904800",
+    "lockedAmount": "148324769990000000000",
     "lockedUntil": "1666418233",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x0321f2011fD4A7694F2121b6d7FD4D11B1B3aC1f",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "410bae16c367b40000",
+    "lockedAmount": "999900000000000000000",
     "lockedUntil": "1667704622",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x2Ec8A5703402B27A9Ae7494A64A171e46D3C4c99",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "410bae16c367b40000",
+    "lockedAmount": "999900000000000000000",
     "lockedUntil": "1667706237",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xa2C4Eed690b85396e292Bd14dC825F9F4dD4B1B1",
     "user": "0x4151860B461be67D48f5Fc76585d98C452C2e309",
-    "lockedAmount": "670ae628f49268800",
+    "lockedAmount": "98999999990000000000",
     "lockedUntil": "1667711621",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x60Bb03847263e4661E9Aa2930A35022Ef72185Db",
     "user": "0x4151860B461be67D48f5Fc76585d98C452C2e309",
-    "lockedAmount": "670ae628f49268800",
+    "lockedAmount": "98999999990000000000",
     "lockedUntil": "1667711704",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xa8711aE1931088f4C19bEDD4bE3b83e5A39bE954",
     "user": "0x8149DC18D39FDBa137E43C871e7801E7CF566D41",
-    "lockedAmount": "22454d7bd906c2000",
+    "lockedAmount": "32926202200000000000",
     "lockedUntil": "1667969781",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xB7fBbFc3cA66B0388806ed872de729dD9E1eCa07",
     "user": "0xF2142eDa4B99132085400d20264B06842eD31f86",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1667980403",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xED90a987bE4F9461F640f7419da5eBA5B1845BFE",
     "user": "0xF2142eDa4B99132085400d20264B06842eD31f86",
-    "lockedAmount": "4066cfd9b200ce8800",
+    "lockedAmount": "989999999990000000000",
     "lockedUntil": "1667980667",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x4a174Aba4920791fc910C5D4Ac0D745Bcf229075",
     "user": "0xAB9eda859ef9038B4732401DD07B4F34464A0b7E",
-    "lockedAmount": "2f846db9264edee000",
+    "lockedAmount": "730449548520000000000",
     "lockedUntil": "1667982220",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x839B75E297904a3c6a096ccFe60417eE35607eA2",
     "user": "0xF2142eDa4B99132085400d20264B06842eD31f86",
-    "lockedAmount": "2f846db9264edee000",
+    "lockedAmount": "730449548520000000000",
     "lockedUntil": "1667984076",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x839B75E297904a3c6a096ccFe60417eE35607eA2",
     "user": "0xF2142eDa4B99132085400d20264B06842eD31f86",
-    "lockedAmount": "20aa60015f5c51a800",
+    "lockedAmount": "502143853710000000000",
     "lockedUntil": "1667989026",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x4a174Aba4920791fc910C5D4Ac0D745Bcf229075",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "20aa60015f5c51a800",
+    "lockedAmount": "502143853710000000000",
     "lockedUntil": "1668025394",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
     "user": "0x1Fa0Fb3a1F51Ad334cCfa069740686d850Fd5997",
-    "lockedAmount": "350a3170428e3000",
+    "lockedAmount": "3184934660000000000",
     "lockedUntil": "1668179886",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x19D385BD82e59FBB7a8B01c9095F6256bD9B4ebF",
     "user": "0x7ec324000973c2583B6EEF10E0e5ACEF7E3A3F17",
-    "lockedAmount": "942aa763bfffdf000",
+    "lockedAmount": "142353732180000000000",
     "lockedUntil": "1670642646",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xA3D309B75b23495ffFB44c515FA518E51134A7d2",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "410d5859c1b124e000",
+    "lockedAmount": "999999985000000000000",
     "lockedUntil": "1670972037",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x616e61aCFb08cA047ed465cc73996d87496A3cca",
     "user": "0x820F349f103AB787C3Dd717253fd7dB8cF32b163",
-    "lockedAmount": "620a44b03f3dec800",
+    "lockedAmount": "94193793190000000000",
     "lockedUntil": "1670972399",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xacf9521B71355bC262e15eAE26242dCe3B3531C1",
     "user": "0xF2142eDa4B99132085400d20264B06842eD31f86",
-    "lockedAmount": "91157d6903d8000",
+    "lockedAmount": "544500000000000000",
     "lockedUntil": "1670973014",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xacf9521B71355bC262e15eAE26242dCe3B3531C1",
     "user": "0xDCaA664D3d2386157B92A59Aa5152E7EbbABbf18",
-    "lockedAmount": "37d801c0ddc9c63800",
+    "lockedAmount": "858446548250000000000",
     "lockedUntil": "1670973251",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x672A83E6E9f73D77d526BCD1C8Cb7F90018E645E",
     "user": "0xCb30Cc9AbC2b3B4AA72A6f42C968D632D58547a2",
-    "lockedAmount": "75cf3d6348da58800",
+    "lockedAmount": "113187617590000000000",
     "lockedUntil": "1670973544",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x616e61aCFb08cA047ed465cc73996d87496A3cca",
     "user": "0x297C1A8428b5c53Ea976d78aB0052BFEFA5eA8f0",
-    "lockedAmount": "68209e43fa6274000",
+    "lockedAmount": "100042279920000000000",
     "lockedUntil": "1670975823",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xdB7e4cE67623242961D82123BD078A215a384D6B",
     "user": "0x297C1A8428b5c53Ea976d78aB0052BFEFA5eA8f0",
-    "lockedAmount": "5ea80077662d4aee00",
+    "lockedAmount": "1455083125006500000000",
     "lockedUntil": "1670976472",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x4E4de538e9F0DfE5EaC442Ed101baa852a4632Ef",
     "user": "0x4151860B461be67D48f5Fc76585d98C452C2e309",
-    "lockedAmount": "a4de3d0e9ba40000",
+    "lockedAmount": "9900000000000000000",
     "lockedUntil": "1670980480",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xE6dda38A944d1a28aE6A38065d20dbb18e5E1882",
     "user": "0x4151860B461be67D48f5Fc76585d98C452C2e309",
-    "lockedAmount": "a4de3d0e9ba40000",
+    "lockedAmount": "9900000000000000000",
     "lockedUntil": "1670980582",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
     "user": "0xEC640f1Dbe4C3E880c69c988cA5398028F770266",
-    "lockedAmount": "a9a7f9ec93563800",
+    "lockedAmount": "10187512090000000000",
     "lockedUntil": "1671090542",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x51af4e17Cd9EDCBECb769162f11e10669054C157",
     "user": "0xEC640f1Dbe4C3E880c69c988cA5398028F770266",
-    "lockedAmount": "3abb43157326a6800",
+    "lockedAmount": "56427333790000000000",
     "lockedUntil": "1671090542",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x1971c0a67009048F14396e0f4ac5cf8Be09d20ab",
     "user": "0xd5277Cc3D8EE9a6a137015416398fCfc21180681",
-    "lockedAmount": "7eb573d5d1e1998000",
+    "lockedAmount": "1947803985440000000000",
     "lockedUntil": "1671164702",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x92aD6212814B7136BdFAFC8E24f08fA7c7c6De79",
     "user": "0x896cc499053293B76176997925B0F0a1a0827Bbd",
-    "lockedAmount": "670ae628f49268800",
+    "lockedAmount": "98999999990000000000",
     "lockedUntil": "1671891059",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x188a49AECCf0Ab3Cf5EA0964BeBDF5b990e70A55",
     "user": "0xaEB9af0f23830677815eF4066aa0cdE772C50E71",
-    "lockedAmount": "a56a11404b19cc4000",
+    "lockedAmount": "2542796444080000000000",
     "lockedUntil": "1672354978",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x9A4daA73303f446F0261c54b540554251543BF4e",
     "user": "0x1e4284c261698fC8e9c7825855f85DFE5c0743CB",
-    "lockedAmount": "e62634225b140000",
+    "lockedAmount": "13820000000000000000",
     "lockedUntil": "1672943629",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xcCBF128Fa211422e588C6655BA022351F8CBBC98",
     "user": "0x8a13Db815d3b3359A6ec7fb1137a04704d8984C6",
-    "lockedAmount": "15d8df553a1e0b1000",
+    "lockedAmount": "335840773740000000000",
     "lockedUntil": "1673035215",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
     "user": "0xADf43aa8c087fd61C1710677B12DAcAF8713E04F",
-    "lockedAmount": "1c5c5a6735cb26800",
+    "lockedAmount": "27248103070000000000",
     "lockedUntil": "1673058041",
     "lockDuration": "31556952"
   },
   {
     "ideaToken": "0x619edcecA67E85C288D73806cbb3a33aE57eebf8",
     "user": "0x3f0c139088C968c69c83B5243d0e18E0f56799Ce",
-    "lockedAmount": "68155a43676e00000",
+    "lockedAmount": "100000000000000000000",
     "lockedUntil": "1673073945",
     "lockDuration": "31556952"
   }

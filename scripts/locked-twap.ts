@@ -26,7 +26,8 @@ const l2Config: Config = {
   factoryAddress: '0xE490A4517F1e8A1551ECb03aF5eB116C6Bbd450b',
   vaultAddress: '0xeC4E1A014fAf0D966332E62970CD7c6553671d76',
   startBlock: 1746173,
-  endBlock: 2895118,
+  //fix
+  endBlock: 4423000,
   isL1: false,
 }
 
@@ -41,15 +42,17 @@ type LockInfo = {
 
 const TOTAL_PAYOUT = new BN('10000000').mul(new BN('10').pow(new BN('18')))
 const BASE_COST = new BN('100000000000000000')
-const PRICE_RISE = new BN('100000000000000')
+const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 //fix startblock comes from file
+//fix endblock
 let lastBlockChecked = l2Config.startBlock
 let tokenList: string[] = []
 let lockedEventList: LockInfo[] = []
 // locked event list comes from file
+
 
 async function main() {
   // const lastBlockCHecked = js read file dict["lastBlockCHecked"]
@@ -58,22 +61,23 @@ async function main() {
 
   // run script initaially just to get L1 token addresses on the first day. then remove from here
   await run(l2Config)
-
+  console.log(tokenList)
+  console.log(lockedEventList)
   console.log(
     `\nFound ${
       tokenList.length
-    } & ${lockedEventList.length} tokens and lockedEvent.`
+    } & ${lockedEventList.length} tokens and lockedEvents.`
   )
 }
 
 async function run(config: Config) {
-  let { web3, exchangeAddress,  vaultAddress, startBlock, endBlock } = config
-  // FIX pull lastchecked block from DB
-  if (lastBlockChecked > endBlock) {
-    startBlock = lastBlockChecked
-    endBlock = await web3.eth.getBlockNumber()
+  let { web3, exchangeAddress,  vaultAddress, startBlock } = config
+  if (false) {
+    startBlock = parseInt(fs.readFileSync("startBlock.json", 'utf8'), 10)
   }
+  const endBlock = await web3.eth.getBlockNumber() 
   await dailyPrices(web3, exchangeAddress, vaultAddress, startBlock, endBlock)
+  fs.writeFileSync("startBlock.json", endBlock.toString())
 }
 
 async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, endBlock: number) {
@@ -87,6 +91,7 @@ async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, 
   bar.start(lockedEvents.length, 0)
   for (const lockedEvent of lockedEvents) {
     tokenList.push(lockedEvent.returnValues['ideaToken'])
+    // FIX correct lock amount values for L1 and L2 script
     // read store a lock event struct that writes the details of the lock for later use
     lockedEventList.push({ideaToken: lockedEvent.returnValues['ideaToken'], user: lockedEvent.returnValues['owner'], 
       lockedAmount : lockedEvent.returnValues['lockedAmount'], lockedUntil: lockedEvent.returnValues['lockedUntil'], lockDuration: lockedEvent.returnValues['lockedDuration']})
@@ -100,8 +105,8 @@ async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, 
 function weighLocked(lockedEventList: LockInfo[]) {
   // if timelocked > 1 month multiply amount by 1.2
   for (const lock of lockedEventList) {
-    if (lock.lockDuration > 30 * 60 * 60 * 24) {
-      lock.lockedAmount = new BN(lock.lockedAmount).mul(new BN('1.2'))
+    if (lock.lockDuration >= 30 * 60 * 60 * 24) {
+      lock.lockedAmount = new BN(lock.lockedAmount).mul(new BN('12')).div(new BN('10'))
     }
   }
   return lockedEventList
@@ -114,9 +119,11 @@ function parseLockedValue(lockedEventList: LockInfo[], priceDict: { [address: st
     const address = lock.user
     const token = lock.ideaToken
     const price = priceDict[token]
-    const amount = new BN(lock.lockedAmount)
-    console.log("price" + price)
-    console.log("amount" + amount)
+    console.log("lockedAmount: " + lock.lockedAmount)
+    //fix check this
+    const amount = (new BN(lock.lockedAmount)).div(new BN(10).pow(new BN(18)))
+    console.log("price: " + price)
+    console.log("amount: " + amount)
     const value = price.mul(amount)
     tvl = tvl.add(value)
     if (!valueDict[address]) {
@@ -126,9 +133,14 @@ function parseLockedValue(lockedEventList: LockInfo[], priceDict: { [address: st
     }
   }
   // FIX need to call database for price of IMO to get apy (decimal) in dollars
+  //fix price or tvl or something must be wrong
   // may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
   const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl)
+  console.log("total_payout " + TOTAL_PAYOUT)
+  console.log("tvl " + tvl)
+  console.log("apy " + apy)
   let payoutDict: { [address: string]: BN } = {}
+  //fix check payout
   for (const address in valueDict) {
     payoutDict[address] = valueDict[address].mul(apy).div(new BN(365))
   }
@@ -155,7 +167,7 @@ function getPrice(supply: BN) {
   if (supply.lte(HATCH_TOKENS)) {
     return BASE_COST
   }
-  const price = PRICE_RISE.mul(supply.sub(HATCH_TOKENS)).add(BASE_COST)
+  const price = (supply.sub(HATCH_TOKENS)).div(PRICE_RISE).add(BASE_COST)
   return price
 }
 
@@ -166,9 +178,10 @@ async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: s
   const newTokens = await parseLocks(web3, vaultAddress, startBlock, endBlock)
   const tokens = Array.from(new Set(newTokens.concat(JSON.parse(existingTokens))))
   // fix write
-  fs.writeFileSync('TotalTokenList.json', JSON.stringify(tokens, null, 2))
+  fs.writeFileSync('totalTokenList.json', JSON.stringify(tokens, null, 2))
   const pastEvents = fs.readFileSync('tokenEventListAdjusted.json','utf8');
   let allEvents = JSON.parse(pastEvents).concat(lockedEventList)
+  fs.writeFileSync('totalUnweightedTokenEventList.json', JSON.stringify(allEvents, null, 2))
   allEvents = weighLocked(allEvents)
   // fix write
   fs.writeFileSync('totalTokenEventList.json', JSON.stringify(allEvents, null, 2))

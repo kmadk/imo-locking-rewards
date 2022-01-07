@@ -61,8 +61,6 @@ async function main() {
 
   // run script initaially just to get L1 token addresses on the first day. then remove from here
   await run(l2Config)
-  console.log(tokenList)
-  console.log(lockedEventList)
   console.log(
     `\nFound ${
       tokenList.length
@@ -72,6 +70,7 @@ async function main() {
 
 async function run(config: Config) {
   let { web3, exchangeAddress,  vaultAddress, startBlock } = config
+  //fix
   if (false) {
     startBlock = parseInt(fs.readFileSync("startBlock.json", 'utf8'), 10)
   }
@@ -135,6 +134,8 @@ function parseLockedValue(lockedEventList: LockInfo[], priceDict: { [address: st
   // FIX need to call database for price of IMO to get apy (decimal) in dollars
   //fix price or tvl or something must be wrong
   // may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
+  // read uniswap contract fix
+  // fix only get rewards if locked during that date
   const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl)
   console.log("total_payout " + TOTAL_PAYOUT)
   console.log("tvl " + tvl)

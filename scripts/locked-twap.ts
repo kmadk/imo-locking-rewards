@@ -26,7 +26,6 @@ const l2Config: Config = {
   factoryAddress: '0xE490A4517F1e8A1551ECb03aF5eB116C6Bbd450b',
   vaultAddress: '0xeC4E1A014fAf0D966332E62970CD7c6553671d76',
   startBlock: 1746173,
-  //fix
   endBlock: 4423000,
   isL1: false,
 }
@@ -46,13 +45,8 @@ const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
-//fix startblock comes from file
-//fix endblock
-let lastBlockChecked = l2Config.startBlock
 let tokenList: string[] = []
 let lockedEventList: LockInfo[] = []
-// locked event list comes from file
-
 
 async function main() {
   // const lastBlockCHecked = js read file dict["lastBlockCHecked"]
@@ -70,7 +64,7 @@ async function main() {
 
 async function run(config: Config) {
   let { web3, exchangeAddress,  vaultAddress, startBlock } = config
-  //fix
+  //fix startblock comes from file
   if (false) {
     startBlock = parseInt(fs.readFileSync("startBlock.json", 'utf8'), 10)
   }
@@ -90,7 +84,6 @@ async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, 
   bar.start(lockedEvents.length, 0)
   for (const lockedEvent of lockedEvents) {
     tokenList.push(lockedEvent.returnValues['ideaToken'])
-    // FIX correct lock amount values for L1 and L2 script
     // read store a lock event struct that writes the details of the lock for later use
     lockedEventList.push({ideaToken: lockedEvent.returnValues['ideaToken'], user: lockedEvent.returnValues['owner'], 
       lockedAmount : lockedEvent.returnValues['lockedAmount'], lockedUntil: lockedEvent.returnValues['lockedUntil'], lockDuration: lockedEvent.returnValues['lockedDuration']})
@@ -178,15 +171,12 @@ async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: s
   const existingTokens = fs.readFileSync('tokenListAdjusted.json','utf8');
   const newTokens = await parseLocks(web3, vaultAddress, startBlock, endBlock)
   const tokens = Array.from(new Set(newTokens.concat(JSON.parse(existingTokens))))
-  // fix write
   fs.writeFileSync('totalTokenList.json', JSON.stringify(tokens, null, 2))
   const pastEvents = fs.readFileSync('tokenEventListAdjusted.json','utf8');
   let allEvents = JSON.parse(pastEvents).concat(lockedEventList)
-  fs.writeFileSync('totalUnweightedTokenEventList.json', JSON.stringify(allEvents, null, 2))
+  //fs.writeFileSync('totalUnweightedTokenEventList.json', JSON.stringify(allEvents, null, 2))
   allEvents = weighLocked(allEvents)
-  // fix write
   fs.writeFileSync('totalTokenEventList.json', JSON.stringify(allEvents, null, 2))
-  // fix migration of addresses from l1 to l2
   console.log(`\nParsing ${tokens.length} Token list`)
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
   bar.start(tokens.length, 0)
@@ -211,10 +201,8 @@ async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: s
   fs.writeFileSync('payoutDict-' + timestamp + '.json', JSON.stringify(payoutDict, null, 2))
   fs.writeFileSync('tvl-' + timestamp + '.json', JSON.stringify(tvl, null, 2))
   fs.writeFileSync('apy-' + timestamp + '.json', JSON.stringify(apy, null, 2))
-  //fix last block
-  // write priceDict to file for that date
+  
   bar.stop()
-  //write new file with new tokens and endblock
 }
 
 async function fetchPastEvents(

@@ -112,7 +112,7 @@ function parseLockedValue(lockedEventList: LockInfo[], priceDict: { [address: st
     const token = lock.ideaToken
     const price = priceDict[token]
     console.log("lockedAmount: " + lock.lockedAmount)
-    //fix check this
+    console.log("lockedAdddress: " + lock.ideaToken)
     const amount = (new BN(lock.lockedAmount)).div(new BN(10).pow(new BN(18)))
     console.log("price: " + price)
     console.log("amount: " + amount)
@@ -124,7 +124,8 @@ function parseLockedValue(lockedEventList: LockInfo[], priceDict: { [address: st
       valueDict[address] = valueDict[address].add(value)
     }
   }
-  // FIX need to call database for price of IMO to get apy (decimal) in dollars
+  
+  // FIX need to call uniswap or database for price of IMO to get apy (decimal) in dollars
   //fix price or tvl or something must be wrong
   // may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
   // read uniswap contract fix
@@ -134,7 +135,6 @@ function parseLockedValue(lockedEventList: LockInfo[], priceDict: { [address: st
   console.log("tvl " + tvl)
   console.log("apy " + apy)
   let payoutDict: { [address: string]: BN } = {}
-  //fix check payout
   for (const address in valueDict) {
     payoutDict[address] = valueDict[address].mul(apy).div(new BN(365))
   }
@@ -182,14 +182,9 @@ async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: s
   bar.start(tokens.length, 0)
   let priceDict: { [address: string]: BN } = {}
   for (const token of tokens) {
-    //fix end of pricedict
     const callableToken = new web3.eth.Contract(ERC20ABI as any, token)
-    console.log("\ntoken: " + token)
     const supply = await callableToken.methods.totalSupply().call()
-    console.log("supply: " + supply)
-    //fix token addresses if from L1
     priceDict[token] = getPrice(new BN(supply))
-    console.log("price: " + priceDict[token])
     bar.increment()
   }
 

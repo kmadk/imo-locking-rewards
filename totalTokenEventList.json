@@ -1125,5 +1125,19 @@
     "lockedAmount": "68155a43676e00000",
     "lockedUntil": "1673073945",
     "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0xEb4634731849ffc2a8e45D3C95c113f5a2f8e3BE",
+    "user": "0x796A716E8Ce3b4F4c2F286674185d6e92B48407a",
+    "lockedAmount": "13dd993e6ed28c0000",
+    "lockedUntil": "1673465063",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
+    "user": "0x473Fc99D90E9F2Ece996E303f11Dd04384f7CA2A",
+    "lockedAmount": "39964593dab08000",
+    "lockedUntil": "1673472998",
+    "lockDuration": "31556952"
   }
 ]

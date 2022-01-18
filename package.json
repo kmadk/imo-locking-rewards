@@ -49,8 +49,10 @@
     "prepublishOnly": "yarn test"
   },
   "dependencies": {
+    "@types/mongoose": "^5.11.97",
     "cli-progress": "^3.9.0",
     "dotenv": "^10.0.0",
+    "mongoose": "^6.1.6",
     "web3": "^1.5.2"
   }
 }

@@ -1139,5 +1139,61 @@
     "lockedAmount": "39964593dab08000",
     "lockedUntil": "1673472998",
     "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0x83B0874194914cFe761fE55FF125BdFCEa66327F",
+    "user": "0xbe0284A4a260dF4c58eEc491d41995CeEe3Fac58",
+    "lockedAmount": "215af58dad2a3800",
+    "lockedUntil": "1673612103",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0x5220028F5058ae6CaFCF7d6BeaD98E4f69F3D699",
+    "user": "0x2856cf9905D923469bB749e9787Fc953B0a321e8",
+    "lockedAmount": "a4a8612491c69800",
+    "lockedUntil": "1673917046",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0x5220028F5058ae6CaFCF7d6BeaD98E4f69F3D699",
+    "user": "0xee1e438e4D9e06958A8b86a7b2c969E9B7E5E982",
+    "lockedAmount": "a47ec8bb494dd000",
+    "lockedUntil": "1673917127",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0x5220028F5058ae6CaFCF7d6BeaD98E4f69F3D699",
+    "user": "0x8320A6fe737fd626CC99E91058a7A3d7fc19751A",
+    "lockedAmount": "a4554fc637ddf800",
+    "lockedUntil": "1673917213",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0x5220028F5058ae6CaFCF7d6BeaD98E4f69F3D699",
+    "user": "0x805B350408f28966Cb4c9dD497F94B0f845B8a1E",
+    "lockedAmount": "a42bf6210b23f800",
+    "lockedUntil": "1673917271",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0x287D3cfCF997a993B837901873BBECa55f4e736C",
+    "user": "0x8d1189f40e5DB00B1856344FE928CAB9170Fa573",
+    "lockedAmount": "214e8348c4f00000",
+    "lockedUntil": "1674006498",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0xF3786A2E0eBC79a692D5dC76A34cfeAe8e327745",
+    "user": "0x43bbCF87765d369A1D838d0C6Fc4877bdBE69D21",
+    "lockedAmount": "4066cfd9b4cc100000",
+    "lockedUntil": "1674014133",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0x60Bb03847263e4661E9Aa2930A35022Ef72185Db",
+    "user": "0xCb30Cc9AbC2b3B4AA72A6f42C968D632D58547a2",
+    "lockedAmount": "522ca4f8f4b978800",
+    "lockedUntil": "1650594249",
+    "lockDuration": "7889400"
   }
 ]

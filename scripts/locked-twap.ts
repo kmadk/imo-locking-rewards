@@ -47,6 +47,7 @@ const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 let tokenList: string[] = []
 let lockedEventList: LockInfo[] = []
+let allEvents: LockInfo[] = []
 
 async function main() {
   // const lastBlockCHecked = js read file dict["lastBlockCHecked"]
@@ -58,7 +59,7 @@ async function main() {
   console.log(
     `\nFound ${
       tokenList.length
-    } & ${lockedEventList.length} tokens and lockedEvents.`
+    } & ${allEvents.length} tokens and lockedEvents.`
   )
 }
 
@@ -174,7 +175,10 @@ async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: s
   const tokens = Array.from(new Set(newTokens.concat(JSON.parse(existingTokens))))
   fs.writeFileSync('totalTokenList.json', JSON.stringify(tokens, null, 2))
   const pastEvents = fs.readFileSync('tokenEventListAdjusted.json','utf8');
-  let allEvents = JSON.parse(pastEvents).concat(lockedEventList)
+  allEvents = JSON.parse(pastEvents).concat(lockedEventList)
+  allEvents = allEvents.filter(async function(lock: LockInfo) {
+    return lock['lockedUntil'] < (await web3.eth.getBlock(await web3.eth.getBlockNumber()))['timestamp'];
+  });
   //fs.writeFileSync('totalUnweightedTokenEventList.json', JSON.stringify(allEvents, null, 2))
   allEvents = weighLocked(allEvents)
   fs.writeFileSync('totalTokenEventList.json', JSON.stringify(allEvents, null, 2))

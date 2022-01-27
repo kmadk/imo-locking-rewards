@@ -33,8 +33,8 @@ export const saveNewTokenEvents = (events: any) => {
   });
 };
 
-export const fetchAllLockedTokenEvents = () => {
-  return TokenEventModel.find({});
+export const fetchAllLockedTokenEvents = (blockTimeStamp: number) => {
+  return TokenEventModel.find({ lockedUntil: { $le: blockTimeStamp } });
 };
 
 export const savePrices = (model: any) => {

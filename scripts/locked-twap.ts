@@ -42,7 +42,7 @@ type LockInfo = {
   lockDuration: number;
 };
 
-const TOTAL_PAYOUT = new BN("10000000").mul(new BN("10").pow(new BN("18")));
+const TOTAL_PAYOUT = new BN("5000000").mul(new BN("10").pow(new BN("18")));
 const BASE_COST = new BN("100000000000000000");
 const PRICE_RISE = new BN("10000");
 const HATCH_TOKENS = new BN("1000000000000000000000");
@@ -50,6 +50,7 @@ const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 let tokenList: string[] = [];
 let lockedEventList: LockInfo[] = [];
+let allEvents: LockInfo[] = [];
 
 async function main() {
   // const lastBlockCHecked = js read file dict["lastBlockCHecked"]
@@ -60,7 +61,7 @@ async function main() {
   await connectMongoDB();
   await run(l2Config);
   console.log(
-    `\nFound ${tokenList.length} & ${lockedEventList.length} tokens and lockedEvents.`
+    `\nFound ${tokenList.length} & ${allEvents.length} tokens and lockedEvents.`
   );
 }
 
@@ -159,17 +160,18 @@ function parseLockedValue(
       valueDict[address] = valueDict[address].add(value);
     }
   }
-  // FIX need to call database for price of IMO to get apy (decimal) in dollars
+
+  // FIX need to call uniswap or database for price of IMO to get apy (decimal) in dollars
   //fix price or tvl or something must be wrong
   // may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
   // read uniswap contract fix
   // fix only get rewards if locked during that date
+  // if lock has expired, can remove that event from the lockedEventList
   const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl);
   console.log("total_payout " + TOTAL_PAYOUT);
   console.log("tvl " + tvl);
   console.log("apy " + apy);
   let payoutDict: { [address: string]: BN } = {};
-  //fix check payout
   for (const address in valueDict) {
     payoutDict[address] = valueDict[address].mul(apy).div(new BN(365));
   }
@@ -245,7 +247,13 @@ async function dailyPrices(
 
   //fs.writeFileSync('totalUnweightedTokenEventList.json', JSON.stringify(allEvents, null, 2))
 
-  let allEvents = await lockingService.fetchAllLockedTokenEvents();
+  const blockTimeStamp = (
+    await web3.eth.getBlock(await web3.eth.getBlockNumber())
+  )["timestamp"];
+
+  let allEvents = await lockingService.fetchAllLockedTokenEvents(
+    Number.parseInt(blockTimeStamp as string)
+  );
 
   // fs.writeFileSync(
   //   "totalTokenEventList.json",

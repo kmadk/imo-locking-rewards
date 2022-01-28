@@ -131,7 +131,8 @@ function parseLockedValue(allEventList: LockInfo[], priceDict: { [address: strin
   console.log("apy " + apy)
   let payoutDict: { [address: string]: BN } = {}
   for (const address in valueDict) {
-    payoutDict[address] = valueDict[address].mul(apy).div(new BN(365))
+    // fix this depends on timescale
+    payoutDict[address] = valueDict[address].mul(apy).div(new BN(365)).div(new BN(24))
   }
   return {tvl, apy, valueDict, payoutDict}
 }
@@ -149,7 +150,7 @@ function getTwapPrices(priceDict: { [address: string]: BN }) {
       twapDict[token] = priceDict[token]
     } else {
     // computes new average price
-    twapDict[token] = new BN(twapDict[token], 16).mul(new BN(iterations)).add(priceDict[token]).div(new BN(iterations + 1))
+    twapDict[token] = (new BN(twapDict[token], 16).mul(new BN(iterations)).add(priceDict[token])).div(new BN(iterations + 1))
     }
   } 
   fs.writeFileSync('twap-dict.json', JSON.stringify(twapDict, null, 2))

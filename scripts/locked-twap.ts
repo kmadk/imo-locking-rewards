@@ -138,18 +138,23 @@ function parseLockedValue(allEventList: LockInfo[], priceDict: { [address: strin
 
 function getTwapPrices(priceDict: { [address: string]: BN }) {
   let twapDict
+  iterations = parseInt(fs.readFileSync('iterations.json', 'utf8'))
   if (iterations == 0) {
     twapDict = priceDict
   } else {
     twapDict = JSON.parse(fs.readFileSync('twap-dict.json', 'utf8'))
   }
-  for (const token of Object.keys(twapDict)) {
+  for (const token of Object.keys(priceDict)) {
+    if (!twapDict[token]) {
+      twapDict[token] = priceDict[token]
+    } else {
     // computes new average price
-    twapDict[token] = twapDict[token].mul(new BN(iterations)).add(priceDict[token]).div(new BN(iterations + 1))
-  }
-  fs.writeFileSync('twap-dict', JSON.stringify(twapDict, null, 2))
-  //FIX: this will need to be tracked in database
+    twapDict[token] = new BN(twapDict[token], 16).mul(new BN(iterations)).add(priceDict[token]).div(new BN(iterations + 1))
+    }
+  } 
+  fs.writeFileSync('twap-dict.json', JSON.stringify(twapDict, null, 2))
   iterations++
+  fs.writeFileSync('iterations.json', iterations.toString())
   return twapDict
 }
 

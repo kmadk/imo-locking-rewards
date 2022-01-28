@@ -1202,5 +1202,12 @@
     "lockedAmount": "5161bcc8a45aed800",
     "lockedUntil": "1651189227",
     "lockDuration": "7889400"
+  },
+  {
+    "ideaToken": "0x4F2F0B724cE76deeC3788D93A8830a0C7fF104f0",
+    "user": "0x6d995326A2b509c184F640EF22F8c8C8E3dFE555",
+    "lockedAmount": "1dbeedb1e61402000",
+    "lockedUntil": "1651269872",
+    "lockDuration": "7889400"
   }
 ]

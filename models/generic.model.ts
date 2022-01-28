@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export interface GenericDocument extends Document {
-  apy: string;
+  apr: string;
   tvl: string;
   blockTimestamp: number;
   createdAt: Date;
@@ -12,7 +12,7 @@ export interface GenericDocument extends Document {
 
 const GenericSchema = new Schema(
   {
-    apy: { type: String, index: true },
+    apr: { type: String, index: true },
     tvl: { type: String, index: true },
     blockTimestamp: { type: Number },
   },

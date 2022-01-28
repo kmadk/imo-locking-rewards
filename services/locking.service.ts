@@ -4,6 +4,7 @@ import { PayoutModel } from "../models/payout.model";
 import { PriceModel } from "../models/price.model";
 import { TokenEventModel } from "../models/token-event.model";
 import { TokenModel } from "../models/token.model";
+import { ITwapModel, TwapModel } from "../models/twap.model";
 import { ValueModel } from "../models/value.model";
 
 export const getLatestBlockNumber = () => {
@@ -33,8 +34,10 @@ export const saveNewTokenEvents = (events: any) => {
   });
 };
 
-export const fetchAllLockedTokenEvents = (blockTimeStamp: number) => {
-  return TokenEventModel.find({ lockedUntil: { $le: blockTimeStamp } });
+export const fetchAllLockedTokenEvents = (blockTimeStamp: any) => {
+  return TokenEventModel.find({
+    lockedUntil: { $lte: Number.parseInt(blockTimeStamp) },
+  });
 };
 
 export const savePrices = (model: any) => {
@@ -55,6 +58,16 @@ export const saveValues = (model: any) => {
   });
 };
 
-export const saveNewApyAndTvl = (model: any) => {
+export const saveNewAprAndTvl = (model: any) => {
   return GenericModel.create(model);
+};
+
+export const saveTwaps = (model: ITwapModel[]) => {
+  return TwapModel.insertMany(model, {
+    ordered: false,
+  });
+};
+
+export const getTwaps = () => {
+  return TwapModel.find();
 };

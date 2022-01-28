@@ -13,6 +13,7 @@ import IdeaTokenFactoryABI from "./abis/ideaTokenFactory.json";
 import IdeaTokenVaultABI from "./abis/ideaTokenVault.json";
 import ERC20ABI from "./abis/erc20.json";
 import { TokenEventDocument } from "../models/token-event.model";
+import { ITwapModel, Twapocument } from "../models/twap.model";
 
 type Config = {
   web3: Web3;
@@ -135,7 +136,7 @@ function weighLocked(lockDuration: number, amount: string) {
 
 function parseLockedValue(
   lockedEventList: TokenEventDocument[],
-  priceDict: { [address: string]: BN }
+  priceDict: ITwapModel[]
 ) {
   let valueDict: { [address: string]: BN } = {};
   let tvl = new BN(0);
@@ -143,7 +144,13 @@ function parseLockedValue(
   for (const lock of lockedEventList) {
     const address = lock.user;
     const token = lock.ideaToken;
-    const price = priceDict[token];
+    let price = new BN(0);
+
+    var twapPrice = priceDict.find((x) => x.token === token);
+
+    if (twapPrice) {
+      price = new BN(twapPrice.value);
+    }
 
     const lockedAmount = weighLocked(lock.lockDuration, lock.lockedAmount);
     console.log("lockedAmount: " + lockedAmount);
@@ -161,39 +168,54 @@ function parseLockedValue(
     }
   }
 
-  // FIX need to call uniswap or database for price of IMO to get apy (decimal) in dollars
+  // FIX need to call uniswap or database for price of IMO to get apr (decimal) in dollars
   //fix price or tvl or something must be wrong
-  // may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
+  // may need to go about apr in different way const apr = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
   // read uniswap contract fix
   // fix only get rewards if locked during that date
   // if lock has expired, can remove that event from the lockedEventList
-  const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl);
+  const apr = TOTAL_PAYOUT.mul(new BN(4)).div(tvl);
   console.log("total_payout " + TOTAL_PAYOUT);
   console.log("tvl " + tvl);
-  console.log("apy " + apy);
+  console.log("apr " + apr);
   let payoutDict: { [address: string]: BN } = {};
   for (const address in valueDict) {
-    payoutDict[address] = valueDict[address].mul(apy).div(new BN(365));
+    payoutDict[address] = valueDict[address].mul(apr).div(new BN(365));
   }
-  return { tvl, apy, valueDict, payoutDict };
+  return { tvl, apr, valueDict, payoutDict };
 }
 
-function getTwapPrices(priceDict: { [address: string]: BN }) {
+async function getTwapPrices(priceDict: { [address: string]: BN }) {
   const iterations = 0;
-  let twapDict;
+  let twapDict: ITwapModel[] = [];
   if (iterations == 0) {
-    twapDict = priceDict;
+    Object.keys(priceDict).forEach((key) => {
+      twapDict.push({
+        token: key,
+        value: priceDict[key].toString(),
+        blockTimestamp: 0,
+      });
+    });
   } else {
-    twapDict = JSON.parse(fs.readFileSync("twap-dict.json", "utf8"));
+    twapDict = (await lockingService.getTwaps()).map((m) => {
+      return {
+        token: m.token,
+        value: m.value,
+        blockTimestamp: m.blockTimestamp,
+      };
+    });
+    // twapDict = JSON.parse(fs.readFileSync("twap-dict.json", "utf8"));
   }
-  for (const token of Object.keys(twapDict)) {
+  for (const token of twapDict) {
     // computes new average price
-    twapDict[token] = twapDict[token]
+    token.value = new BN(token.value)
       .mul(new BN(iterations))
-      .add(priceDict[token])
-      .div(new BN(iterations + 1));
+      .add(priceDict[token.token])
+      .div(new BN(iterations + 1))
+      .toString();
   }
-  fs.writeFileSync("twap-dict", JSON.stringify(twapDict, null, 2));
+
+  // fs.writeFileSync("twap-dict", JSON.stringify(twapDict, null, 2));
   return twapDict;
 }
 
@@ -280,14 +302,17 @@ async function dailyPrices(
     bar.increment();
   }
 
-  const twapPrices = getTwapPrices(priceDict);
+  const twapPrices = await getTwapPrices(priceDict);
 
-  const { tvl, apy, valueDict, payoutDict } = parseLockedValue(
+  const { tvl, apr, valueDict, payoutDict } = parseLockedValue(
     allEvents,
     twapPrices
   );
 
   const timestamp = (await web3.eth.getBlock(endBlock)).timestamp;
+
+  // STORE TWAP PRICES
+  await lockingService.saveTwaps(twapPrices);
 
   let prices: any[] = [];
   Object.keys(priceDict).forEach((key) => {
@@ -321,8 +346,8 @@ async function dailyPrices(
   });
   await lockingService.savePayouts(payouts);
 
-  await lockingService.saveNewApyAndTvl({
-    apy,
+  await lockingService.saveNewAprAndTvl({
+    apr,
     tvl,
     blockTimestamp: timestamp,
   });
@@ -344,7 +369,7 @@ async function dailyPrices(
 
   // fs.writeFileSync("tvl-" + timestamp + ".json", JSON.stringify(tvl, null, 2));
 
-  // fs.writeFileSync("apy-" + timestamp + ".json", JSON.stringify(apy, null, 2));
+  // fs.writeFileSync("apr-" + timestamp + ".json", JSON.stringify(apr, null, 2));
 
   bar.stop();
 }

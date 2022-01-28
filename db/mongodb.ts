@@ -8,6 +8,7 @@ import "../models/token-event.model";
 import "../models/value.model";
 import "../models/block.model";
 import "../models/generic.model";
+import "../models/twap.model";
 
 async function connectMongoDB() {
   const mongoURI: string = process.env.MONGODB_URI || "localhost:2700";

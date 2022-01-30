@@ -59,8 +59,8 @@ async function main() {
   
   // run script initaially just to get L1 token addresses on the first day. then remove from here
   await run(l1Config)
-
-  fs.writeFileSync('tokenListAdjusted.json', JSON.stringify(Array.from(new Set(tokenList)), null, 2))
+  tokenList = Array.from(new Set(tokenList))
+  fs.writeFileSync('tokenListAdjusted.json', JSON.stringify(tokenList, null, 2))
   fs.writeFileSync('tokenEventListAdjusted.json', JSON.stringify(lockedEventList, null, 2))
   console.log(
     `\nFound ${
@@ -80,6 +80,16 @@ async function adjustForL2(marketID: number, tokenID: number) {
   const ideaToken = await factory.methods.getTokenInfo(marketID, tokenID).call()
   console.log(ideaToken)
   return ideaToken
+}
+
+function weighLocked(lockedEventList: LockInfo[]) {
+  // if timelocked > 1 month multiply amount by 1.2
+  for (const lock of lockedEventList) {
+    if (lock.lockDuration >= 30 * 60 * 60 * 24) {
+      lock.lockedAmount = new BN(lock.lockedAmount).mul(new BN('12')).div(new BN('10'))
+    }
+  }
+  return lockedEventList
 }
 
 async function parseLocks(web3: Web3, vaultAddress: string, factoryAddress: string, startBlock: number, endBlock: number) {
@@ -107,7 +117,7 @@ async function parseLocks(web3: Web3, vaultAddress: string, factoryAddress: stri
     bar.increment()
   }
   bar.stop()
-  return tokenList
+  lockedEventList = weighLocked(lockedEventList)
 }
 
 async function fetchPastEvents(

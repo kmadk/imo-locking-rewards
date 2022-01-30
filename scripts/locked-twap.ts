@@ -52,6 +52,8 @@ const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 let tokenList: string[] = [];
 let lockedEventList: LockInfo[] = [];
 let allEvents: LockInfo[] = [];
+let allTokens: string[] = [];
+let iterations = 0;
 
 async function main() {
   // const lastBlockCHecked = js read file dict["lastBlockCHecked"]
@@ -108,8 +110,10 @@ async function parseLocks(
   console.log(`\nParsing ${lockedEvents.length} Locked events`);
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
   bar.start(lockedEvents.length, 0);
+
+  let newTokens: string[] = [];
   for (const lockedEvent of lockedEvents) {
-    tokenList.push(lockedEvent.returnValues["ideaToken"]);
+    newTokens.push(lockedEvent.returnValues["ideaToken"]);
     // read store a lock event struct that writes the details of the lock for later use
     lockedEventList.push({
       ideaToken: lockedEvent.returnValues["ideaToken"],
@@ -122,7 +126,7 @@ async function parseLocks(
   }
   bar.stop();
 
-  return tokenList;
+  return { newTokens, lockedEventList };
 }
 
 function weighLocked(lockDuration: number, amount: string) {
@@ -155,6 +159,9 @@ function parseLockedValue(
     const lockedAmount = weighLocked(lock.lockDuration, lock.lockedAmount);
     console.log("lockedAmount: " + lockedAmount);
 
+    // Main branch
+    // const amount = new BN(lock.lockedAmount, 16).div(new BN(10).pow(new BN(18)))
+
     //fix check this
     const amount = new BN(lockedAmount).div(new BN(10).pow(new BN(18)));
     console.log("price: " + price);
@@ -167,26 +174,25 @@ function parseLockedValue(
       valueDict[address] = valueDict[address].add(value);
     }
   }
-
-  // FIX need to call uniswap or database for price of IMO to get apr (decimal) in dollars
-  //fix price or tvl or something must be wrong
-  // may need to go about apr in different way const apr = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
-  // read uniswap contract fix
-  // fix only get rewards if locked during that date
-  // if lock has expired, can remove that event from the lockedEventList
+  // FIX need to call sushiswap or database for price of IMO to get apy (decimal) in dollars
+  // fix may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
   const apr = TOTAL_PAYOUT.mul(new BN(4)).div(tvl);
   console.log("total_payout " + TOTAL_PAYOUT);
   console.log("tvl " + tvl);
-  console.log("apr " + apr);
+  console.log("apy " + apr);
   let payoutDict: { [address: string]: BN } = {};
   for (const address in valueDict) {
-    payoutDict[address] = valueDict[address].mul(apr).div(new BN(365));
+    // fix this depends on timescale
+    payoutDict[address] = valueDict[address]
+      .mul(apr)
+      .div(new BN(365))
+      .div(new BN(24));
   }
   return { tvl, apr, valueDict, payoutDict };
 }
 
 async function getTwapPrices(priceDict: { [address: string]: BN }) {
-  const iterations = 0;
+  let iterations = 0; // READ FROM DATABASE
   let twapDict: ITwapModel[] = [];
   if (iterations == 0) {
     Object.keys(priceDict).forEach((key) => {
@@ -206,16 +212,28 @@ async function getTwapPrices(priceDict: { [address: string]: BN }) {
     });
     // twapDict = JSON.parse(fs.readFileSync("twap-dict.json", "utf8"));
   }
-  for (const token of twapDict) {
-    // computes new average price
-    token.value = new BN(token.value)
-      .mul(new BN(iterations))
-      .add(priceDict[token.token])
-      .div(new BN(iterations + 1))
-      .toString();
-  }
 
-  // fs.writeFileSync("twap-dict", JSON.stringify(twapDict, null, 2));
+  for (const token of Object.keys(priceDict)) {
+    const twapValue = twapDict.find((x) => x.token === token);
+
+    if (!twapValue) {
+      twapDict.push({
+        token: token,
+        value: priceDict[token].toString(),
+        blockTimestamp: 0,
+      });
+    } else {
+      // computes new average price
+      twapValue.value = new BN(twapValue.value, 16)
+        .mul(new BN(iterations))
+        .add(priceDict[token])
+        .div(new BN(iterations + 1))
+        .toString();
+    }
+  }
+  // fs.writeFileSync("twap-dict.json", JSON.stringify(twapDict, null, 2));
+  iterations++;
+  // fs.writeFileSync("iterations.json", iterations.toString());
   return twapDict;
 }
 
@@ -240,7 +258,12 @@ async function dailyPrices(
     exchangeAddress
   );
 
-  const newTokens = await parseLocks(web3, vaultAddress, startBlock, endBlock);
+  const parsedLocks = await parseLocks(
+    web3,
+    vaultAddress,
+    startBlock,
+    endBlock
+  );
 
   // IMPORT PREVIOUS TOKENS
   // const existingTokens = fs.readFileSync("tokenListAdjusted.json", "utf8");
@@ -249,8 +272,8 @@ async function dailyPrices(
   // );
   // await lockingService.addNewTokens(tokens);
 
-  if (newTokens.length > 0) {
-    await lockingService.addNewTokens(newTokens);
+  if (parsedLocks.newTokens.length > 0) {
+    await lockingService.addNewTokens(parsedLocks.newTokens);
   }
 
   const allTokens = await (

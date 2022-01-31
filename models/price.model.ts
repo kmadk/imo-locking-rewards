@@ -18,6 +18,7 @@ const PriceSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

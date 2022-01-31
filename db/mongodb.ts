@@ -7,8 +7,10 @@ import "../models/price.model";
 import "../models/token-event.model";
 import "../models/value.model";
 import "../models/block.model";
-import "../models/generic.model";
+import "../models/apr.model";
+import "../models/tvl.model";
 import "../models/twap.model";
+import "../models/iteration.model";
 
 async function connectMongoDB() {
   const mongoURI: string = process.env.MONGODB_URI || "localhost:2700";

@@ -13,7 +13,8 @@ import IdeaTokenFactoryABI from "./abis/ideaTokenFactory.json";
 import IdeaTokenVaultABI from "./abis/ideaTokenVault.json";
 import ERC20ABI from "./abis/erc20.json";
 import { TokenEventDocument } from "../models/token-event.model";
-import { ITwapModel, Twapocument } from "../models/twap.model";
+import { ITwapModel } from "../models/twap.model";
+import { IIterationModel } from "../models/iteration.model";
 
 type Config = {
   web3: Web3;
@@ -49,11 +50,10 @@ const PRICE_RISE = new BN("10000");
 const HATCH_TOKENS = new BN("1000000000000000000000");
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-let tokenList: string[] = [];
 let lockedEventList: LockInfo[] = [];
-let allEvents: LockInfo[] = [];
+let allEvents: TokenEventDocument[] = [];
 let allTokens: string[] = [];
-let iterations = 0;
+let latestIteration: IIterationModel = { id: undefined, value: 0 };
 
 async function main() {
   // const lastBlockCHecked = js read file dict["lastBlockCHecked"]
@@ -64,7 +64,7 @@ async function main() {
   await connectMongoDB();
   await run(l2Config);
   console.log(
-    `\nFound ${tokenList.length} & ${allEvents.length} tokens and lockedEvents.`
+    `\nFound ${allTokens.length} & ${allEvents.length} tokens and lockedEvents.`
   );
 }
 
@@ -192,9 +192,10 @@ function parseLockedValue(
 }
 
 async function getTwapPrices(priceDict: { [address: string]: BN }) {
-  let iterations = 0; // READ FROM DATABASE
+  latestIteration =
+    (await lockingService.getLatestIteration()) as IIterationModel;
   let twapDict: ITwapModel[] = [];
-  if (iterations == 0) {
+  if (latestIteration.value == 0) {
     Object.keys(priceDict).forEach((key) => {
       twapDict.push({
         token: key,
@@ -225,14 +226,14 @@ async function getTwapPrices(priceDict: { [address: string]: BN }) {
     } else {
       // computes new average price
       twapValue.value = new BN(twapValue.value, 16)
-        .mul(new BN(iterations))
+        .mul(new BN(latestIteration.value))
         .add(priceDict[token])
-        .div(new BN(iterations + 1))
+        .div(new BN(latestIteration.value + 1))
         .toString();
     }
   }
   // fs.writeFileSync("twap-dict.json", JSON.stringify(twapDict, null, 2));
-  iterations++;
+  latestIteration.value++;
   // fs.writeFileSync("iterations.json", iterations.toString());
   return twapDict;
 }
@@ -276,9 +277,7 @@ async function dailyPrices(
     await lockingService.addNewTokens(parsedLocks.newTokens);
   }
 
-  const allTokens = await (
-    await lockingService.fetchAllTokens()
-  ).map((m) => m.value);
+  allTokens = await (await lockingService.fetchAllTokens()).map((m) => m.value);
 
   // fs.writeFileSync("totalTokenList.json", JSON.stringify(tokens, null, 2));
 
@@ -296,7 +295,7 @@ async function dailyPrices(
     await web3.eth.getBlock(await web3.eth.getBlockNumber())
   )["timestamp"];
 
-  let allEvents = await lockingService.fetchAllLockedTokenEvents(
+  allEvents = await lockingService.fetchAllLockedTokenEvents(
     Number.parseInt(blockTimeStamp as string)
   );
 
@@ -334,7 +333,17 @@ async function dailyPrices(
 
   const timestamp = (await web3.eth.getBlock(endBlock)).timestamp;
 
+  await lockingService.updateIterationValue(
+    latestIteration.id,
+    latestIteration.value
+  );
+
   // STORE TWAP PRICES
+  twapPrices
+    .filter((x) => x.blockTimestamp === 0)
+    .forEach((m) => {
+      m.blockTimestamp = timestamp as number;
+    });
   await lockingService.saveTwaps(twapPrices);
 
   let prices: any[] = [];
@@ -351,7 +360,7 @@ async function dailyPrices(
   let values: any[] = [];
   Object.keys(valueDict).forEach((key) => {
     values.push({
-      token: key,
+      address: key,
       price: valueDict[key].toString(),
       blockTimestamp: timestamp,
     });
@@ -362,16 +371,20 @@ async function dailyPrices(
   let payouts: any[] = [];
   Object.keys(payoutDict).forEach((key) => {
     payouts.push({
-      token: key,
-      price: payoutDict[key].toString(),
+      address: key,
+      value: payoutDict[key].toString(),
       blockTimestamp: timestamp,
     });
   });
   await lockingService.savePayouts(payouts);
 
-  await lockingService.saveNewAprAndTvl({
-    apr,
-    tvl,
+  await lockingService.saveApr({
+    value: apr,
+    blockTimestamp: timestamp,
+  });
+
+  await lockingService.saveTvl({
+    value: tvl,
     blockTimestamp: timestamp,
   });
 

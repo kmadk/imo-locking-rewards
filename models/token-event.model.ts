@@ -17,11 +17,12 @@ const TokenEventSchema = new Schema(
     ideaToken: { type: String, index: true },
     user: { type: String, index: true },
     lockedAmount: { type: String },
-    lockedUntil: { type: Number },
+    lockedUntil: { type: Number, index: true },
     lockDuration: { type: Number },
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

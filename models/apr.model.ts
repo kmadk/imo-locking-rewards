@@ -2,26 +2,22 @@ import type { Document } from "mongoose";
 import mongoose, { Schema } from "mongoose";
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export interface GenericDocument extends Document {
-  apr: string;
-  tvl: string;
+export interface AprDocument extends Document {
+  value: string;
   blockTimestamp: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const GenericSchema = new Schema(
+const AprSchema = new Schema(
   {
-    apr: { type: String, index: true },
-    tvl: { type: String, index: true },
+    value: { type: String, index: true },
     blockTimestamp: { type: Number },
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
-export const GenericModel = mongoose.model<GenericDocument>(
-  "Generic",
-  GenericSchema
-);
+export const AprModel = mongoose.model<AprDocument>("Apr", AprSchema);

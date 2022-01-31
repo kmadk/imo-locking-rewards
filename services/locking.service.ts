@@ -1,14 +1,16 @@
 import { BlockModel } from "../models/block.model";
-import { GenericModel } from "../models/generic.model";
+import { AprModel } from "../models/apr.model";
 import { PayoutModel } from "../models/payout.model";
 import { PriceModel } from "../models/price.model";
 import { TokenEventModel } from "../models/token-event.model";
 import { TokenModel } from "../models/token.model";
 import { ITwapModel, TwapModel } from "../models/twap.model";
 import { ValueModel } from "../models/value.model";
+import { TvlModel } from "../models/tvl.model";
+import { IterationModel } from "../models/iteration.model";
 
 export const getLatestBlockNumber = () => {
-  return BlockModel.findOne({}, {}, { sort: { created_at: -1 } });
+  return BlockModel.findOne({}, {}, { sort: { createdAt: -1 } });
 };
 
 export const addLatestBlockNumber = (blockNumber: number) => {
@@ -18,10 +20,11 @@ export const addLatestBlockNumber = (blockNumber: number) => {
 };
 
 export const addNewTokens = (tokens: string[]) => {
-  const newTokens = tokens.map((token) => ({ value: token }));
-  return TokenModel.insertMany(newTokens, {
-    ordered: false,
-  });
+  const options = { upsert: true, new: true, setDefaultsOnInsert: true };
+  const newTokens = tokens.map((token) =>
+    TokenModel.findOneAndUpdate({ value: token }, { value: token }, options)
+  );
+  return Promise.all(newTokens);
 };
 
 export const fetchAllTokens = () => {
@@ -36,7 +39,7 @@ export const saveNewTokenEvents = (events: any) => {
 
 export const fetchAllLockedTokenEvents = (blockTimeStamp: any) => {
   return TokenEventModel.find({
-    lockedUntil: { $lte: Number.parseInt(blockTimeStamp) },
+    lockedUntil: { $gte: Number.parseInt(blockTimeStamp) },
   });
 };
 
@@ -58,8 +61,12 @@ export const saveValues = (model: any) => {
   });
 };
 
-export const saveNewAprAndTvl = (model: any) => {
-  return GenericModel.create(model);
+export const saveTvl = (model: any) => {
+  return TvlModel.create(model);
+};
+
+export const saveApr = (model: any) => {
+  return AprModel.create(model);
 };
 
 export const saveTwaps = (model: ITwapModel[]) => {
@@ -70,4 +77,24 @@ export const saveTwaps = (model: ITwapModel[]) => {
 
 export const getTwaps = () => {
   return TwapModel.find();
+};
+
+export const getLatestIteration = () => {
+  return IterationModel.findOne({}, {}, { sort: { created_at: -1 } });
+};
+
+export const updateIterationValue = (id: string | undefined, value: number) => {
+  if (id === undefined) {
+    return IterationModel.create({ value });
+  }
+
+  return IterationModel.findByIdAndUpdate(id, {
+    value: value,
+  });
+};
+
+export const addIterationValue = (value: number) => {
+  return IterationModel.create({
+    value: value,
+  });
 };

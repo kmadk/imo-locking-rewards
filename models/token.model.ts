@@ -10,10 +10,11 @@ export interface TokenDocument extends Document {
 
 const TokenSchema = new Schema(
   {
-    value: { type: String, index: true },
+    value: { type: String, index: true, unique: true },
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

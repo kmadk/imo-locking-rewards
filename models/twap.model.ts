@@ -25,6 +25,7 @@ const TwapSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

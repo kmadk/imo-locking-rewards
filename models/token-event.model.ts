@@ -6,6 +6,7 @@ export interface TokenEventDocument extends Document {
   ideaToken: string;
   user: string;
   lockedAmount: string;
+  lockedAmountAsNumber: number;
   lockedUntil: number;
   lockDuration: number;
   createdAt: Date;
@@ -17,6 +18,7 @@ const TokenEventSchema = new Schema(
     ideaToken: { type: String, index: true },
     user: { type: String, index: true },
     lockedAmount: { type: String },
+    lockedAmountAsNumber: { type: Number, index: true },
     lockedUntil: { type: Number, index: true },
     lockDuration: { type: Number },
   },

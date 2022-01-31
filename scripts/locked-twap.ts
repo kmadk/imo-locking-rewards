@@ -49,6 +49,7 @@ const BASE_COST = new BN("100000000000000000");
 const PRICE_RISE = new BN("10000");
 const HATCH_TOKENS = new BN("1000000000000000000000");
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+const EVENT_MINIMUM_AMOUNT = new BN(3);
 
 let lockedEventList: LockInfo[] = [];
 let allEvents: TokenEventDocument[] = [];
@@ -60,12 +61,18 @@ async function main() {
   // const lockedTokenList = js read fine dict["lockedTokenList"]
   // creat a new dict with new values at respective places and rewrite file w new dict
 
-  // run script initaially just to get L1 token addresses on the first day. then remove from here
-  await connectMongoDB();
-  await run(l2Config);
-  console.log(
-    `\nFound ${allTokens.length} & ${allEvents.length} tokens and lockedEvents.`
-  );
+  try {
+    // run script initaially just to get L1 token addresses on the first day. then remove from here
+    console.log("Job started started at", new Date());
+    await connectMongoDB();
+    await run(l2Config);
+    console.log(
+      `\nFound ${allTokens.length} & ${allEvents.length} tokens and lockedEvents.`
+    );
+    console.log("Job finishing at", new Date());
+  } catch (error) {
+    console.log("Web job terminated due to error", error);
+  }
 }
 
 async function run(config: Config) {
@@ -129,13 +136,16 @@ async function parseLocks(
   return { newTokens, lockedEventList };
 }
 
-function weighLocked(lockDuration: number, amount: string) {
+function weighLocked(lockedEventList: LockInfo[]) {
   // if timelocked > 1 month multiply amount by 1.2
-  if (lockDuration >= 30 * 60 * 60 * 24) {
-    return new BN(amount).mul(new BN("12")).div(new BN("10"));
+  for (const lock of lockedEventList) {
+    if (lock.lockDuration >= 30 * 60 * 60 * 24) {
+      lock.lockedAmount = new BN(lock.lockedAmount)
+        .mul(new BN("12"))
+        .div(new BN("10"));
+    }
   }
-
-  return amount;
+  return lockedEventList;
 }
 
 function parseLockedValue(
@@ -156,14 +166,10 @@ function parseLockedValue(
       price = new BN(twapPrice.value);
     }
 
-    const lockedAmount = weighLocked(lock.lockDuration, lock.lockedAmount);
-    console.log("lockedAmount: " + lockedAmount);
-
-    // Main branch
-    // const amount = new BN(lock.lockedAmount, 16).div(new BN(10).pow(new BN(18)))
-
     //fix check this
-    const amount = new BN(lockedAmount).div(new BN(10).pow(new BN(18)));
+    const amount = new BN(lock.lockedAmount, 16).div(
+      new BN(10).pow(new BN(18))
+    );
     console.log("price: " + price);
     console.log("amount: " + amount);
     const value = price.mul(amount);
@@ -174,12 +180,12 @@ function parseLockedValue(
       valueDict[address] = valueDict[address].add(value);
     }
   }
-  // FIX need to call sushiswap or database for price of IMO to get apy (decimal) in dollars
-  // fix may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
+  // FIX need to call sushiswap or database for price of IMO to get apr (decimal) in dollars
+  // fix may need to go about apr in different way const apr = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
   const apr = TOTAL_PAYOUT.mul(new BN(4)).div(tvl);
   console.log("total_payout " + TOTAL_PAYOUT);
   console.log("tvl " + tvl);
-  console.log("apy " + apr);
+  console.log("apr " + apr);
   let payoutDict: { [address: string]: BN } = {};
   for (const address in valueDict) {
     // fix this depends on timescale
@@ -286,6 +292,8 @@ async function dailyPrices(
   // let allEvents = JSON.parse(pastEvents).concat(lockedEventList);
   // await lockingService.saveNewTokenEvents(allEvents);
 
+  lockedEventList = weighLocked(lockedEventList);
+
   if (lockedEventList && lockedEventList.length > 0)
     await lockingService.saveNewTokenEvents(lockedEventList);
 
@@ -296,7 +304,8 @@ async function dailyPrices(
   )["timestamp"];
 
   allEvents = await lockingService.fetchAllLockedTokenEvents(
-    Number.parseInt(blockTimeStamp as string)
+    Number.parseInt(blockTimeStamp as string),
+    Number.parseInt(EVENT_MINIMUM_AMOUNT.toString(), 16)
   );
 
   // fs.writeFileSync(
@@ -350,7 +359,8 @@ async function dailyPrices(
   Object.keys(priceDict).forEach((key) => {
     prices.push({
       token: key,
-      price: priceDict[key].toString(),
+      value: priceDict[key].toString(),
+      valueAsNumber: Number.parseInt(priceDict[key].toString(), 16),
       blockTimestamp: timestamp,
     });
   });
@@ -361,7 +371,8 @@ async function dailyPrices(
   Object.keys(valueDict).forEach((key) => {
     values.push({
       address: key,
-      price: valueDict[key].toString(),
+      value: valueDict[key].toString(),
+      valueAsNumber: Number.parseInt(valueDict[key].toString(), 16),
       blockTimestamp: timestamp,
     });
   });
@@ -373,13 +384,14 @@ async function dailyPrices(
     payouts.push({
       address: key,
       value: payoutDict[key].toString(),
+      valueAsNumber: Number.parseInt(payoutDict[key].toString(), 16),
       blockTimestamp: timestamp,
     });
   });
   await lockingService.savePayouts(payouts);
 
   await lockingService.saveApr({
-    value: apr,
+    value: apr.toString(),
     blockTimestamp: timestamp,
   });
 

@@ -5,6 +5,7 @@ import mongoose, { Schema } from "mongoose";
 export interface ValueDocument extends Document {
   address: string;
   value: string;
+  valueAsNumber: Number;
   blockTimestamp: number;
   createdAt: Date;
   updatedAt: Date;
@@ -14,6 +15,7 @@ const ValueSchema = new Schema(
   {
     address: { type: String, index: true },
     value: { type: String },
+    valueAsNumber: { type: Number },
     blockTimestamp: { type: Number },
   },
   {

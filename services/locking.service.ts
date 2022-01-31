@@ -32,14 +32,21 @@ export const fetchAllTokens = () => {
 };
 
 export const saveNewTokenEvents = (events: any) => {
+  events.forEach((element: any) => {
+    element.lockedAmountAsNumber = parseInt(element.lockedAmount, 16);
+  });
   return TokenEventModel.insertMany(events, {
     ordered: false,
   });
 };
 
-export const fetchAllLockedTokenEvents = (blockTimeStamp: any) => {
+export const fetchAllLockedTokenEvents = (
+  blockTimeStamp: number,
+  amount: number
+) => {
   return TokenEventModel.find({
-    lockedUntil: { $gte: Number.parseInt(blockTimeStamp) },
+    lockedUntil: { $gte: blockTimeStamp },
+    lockedAmountAsNumber: { $gt: amount },
   });
 };
 

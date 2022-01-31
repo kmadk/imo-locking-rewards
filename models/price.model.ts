@@ -4,8 +4,9 @@ import mongoose, { Schema } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export interface PriceDocument extends Document {
   token: string;
-  price: string;
+  value: string;
   blockTimestamp: number;
+  valueAsNumber: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -13,7 +14,8 @@ export interface PriceDocument extends Document {
 const PriceSchema = new Schema(
   {
     token: { type: String, index: true },
-    price: { type: String },
+    value: { type: String },
+    valueAsNumber: { type: Number },
     blockTimestamp: { type: Number },
   },
   {

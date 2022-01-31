@@ -32,9 +32,6 @@ export const fetchAllTokens = () => {
 };
 
 export const saveNewTokenEvents = (events: any) => {
-  events.forEach((element: any) => {
-    element.lockedAmountAsNumber = parseInt(element.lockedAmount, 16);
-  });
   return TokenEventModel.insertMany(events, {
     ordered: false,
   });
@@ -46,7 +43,6 @@ export const fetchAllLockedTokenEvents = (
 ) => {
   return TokenEventModel.find({
     lockedUntil: { $gte: blockTimeStamp },
-    lockedAmountAsNumber: { $gt: amount },
   });
 };
 

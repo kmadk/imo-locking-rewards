@@ -165,7 +165,8 @@ function parseLockedValue(
     if (twapPrice) {
       price = new BN(twapPrice.value);
     }
-
+    console.log("lockedAmount: " + parseInt(lock.lockedAmount.toString(), 16));
+    console.log("lockedAddress: " + lock.ideaToken);
     //fix check this
     const amount = new BN(lock.lockedAmount, 16).div(
       new BN(10).pow(new BN(18))
@@ -182,7 +183,7 @@ function parseLockedValue(
   }
   // FIX need to call sushiswap or database for price of IMO to get apr (decimal) in dollars
   // fix may need to go about apr in different way const apr = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
-  const apr = TOTAL_PAYOUT.mul(new BN(4)).div(tvl);
+  const apr = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100));
   console.log("total_payout " + TOTAL_PAYOUT);
   console.log("tvl " + tvl);
   console.log("apr " + apr);
@@ -192,7 +193,8 @@ function parseLockedValue(
     payoutDict[address] = valueDict[address]
       .mul(apr)
       .div(new BN(365))
-      .div(new BN(24));
+      .div(new BN(24))
+      .div(new BN(100));
   }
   return { tvl, apr, valueDict, payoutDict };
 }
@@ -205,7 +207,7 @@ async function getTwapPrices(priceDict: { [address: string]: BN }) {
     Object.keys(priceDict).forEach((key) => {
       twapDict.push({
         token: key,
-        value: priceDict[key].toString(),
+        value: priceDict[key].toString("hex"),
         blockTimestamp: 0,
       });
     });
@@ -226,7 +228,7 @@ async function getTwapPrices(priceDict: { [address: string]: BN }) {
     if (!twapValue) {
       twapDict.push({
         token: token,
-        value: priceDict[token].toString(),
+        value: priceDict[token].toString("hex"),
         blockTimestamp: 0,
       });
     } else {
@@ -294,9 +296,19 @@ async function dailyPrices(
 
   lockedEventList = weighLocked(lockedEventList);
 
-  if (lockedEventList && lockedEventList.length > 0)
-    await lockingService.saveNewTokenEvents(lockedEventList);
-
+  if (lockedEventList && lockedEventList.length > 0) {
+    const newEventList = lockedEventList.map((i) => {
+      return {
+        ideaToken: i.ideaToken,
+        user: i.user,
+        lockedAmount: i.lockedAmount.toString("hex"),
+        lockedAmountAsNumber: Number.parseInt(i.lockedAmount.toString()),
+        lockedUntil: i.lockedUntil,
+        lockDuration: i.lockDuration,
+      };
+    });
+    await lockingService.saveNewTokenEvents(newEventList);
+  }
   //fs.writeFileSync('totalUnweightedTokenEventList.json', JSON.stringify(allEvents, null, 2))
 
   const blockTimeStamp = (
@@ -359,7 +371,7 @@ async function dailyPrices(
   Object.keys(priceDict).forEach((key) => {
     prices.push({
       token: key,
-      value: priceDict[key].toString(),
+      value: priceDict[key].toString("hex"),
       valueAsNumber: Number.parseInt(priceDict[key].toString(), 16),
       blockTimestamp: timestamp,
     });
@@ -371,7 +383,7 @@ async function dailyPrices(
   Object.keys(valueDict).forEach((key) => {
     values.push({
       address: key,
-      value: valueDict[key].toString(),
+      value: valueDict[key].toString("hex"),
       valueAsNumber: Number.parseInt(valueDict[key].toString(), 16),
       blockTimestamp: timestamp,
     });
@@ -383,7 +395,7 @@ async function dailyPrices(
   Object.keys(payoutDict).forEach((key) => {
     payouts.push({
       address: key,
-      value: payoutDict[key].toString(),
+      value: payoutDict[key].toString("hex"),
       valueAsNumber: Number.parseInt(payoutDict[key].toString(), 16),
       blockTimestamp: timestamp,
     });
@@ -392,11 +404,13 @@ async function dailyPrices(
 
   await lockingService.saveApr({
     value: apr.toString(),
+    valueAsHex: apr.toString("hex"),
     blockTimestamp: timestamp,
   });
 
   await lockingService.saveTvl({
-    value: tvl,
+    value: apr.toString(),
+    valueAsHex: tvl.toString("hex"),
     blockTimestamp: timestamp,
   });
 

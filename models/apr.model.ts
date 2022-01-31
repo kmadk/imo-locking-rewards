@@ -4,6 +4,7 @@ import mongoose, { Schema } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export interface AprDocument extends Document {
   value: string;
+  valueAsHex: string;
   blockTimestamp: number;
   createdAt: Date;
   updatedAt: Date;
@@ -12,6 +13,7 @@ export interface AprDocument extends Document {
 const AprSchema = new Schema(
   {
     value: { type: String, index: true },
+    valueAsHex: { type: String },
     blockTimestamp: { type: Number },
   },
   {

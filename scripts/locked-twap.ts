@@ -125,14 +125,14 @@ function parseLockedValue(allEventList: LockInfo[], priceDict: { [address: strin
   }
   // FIX need to call sushiswap or database for price of IMO to get apy (decimal) in dollars
   // fix may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
-  const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl)
+  const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100))
   console.log("total_payout " + TOTAL_PAYOUT)
   console.log("tvl " + tvl)
   console.log("apy " + apy)
   let payoutDict: { [address: string]: BN } = {}
   for (const address in valueDict) {
     // fix this depends on timescale
-    payoutDict[address] = valueDict[address].mul(apy).div(new BN(365)).div(new BN(24))
+    payoutDict[address] = valueDict[address].mul(apy).div(new BN(365)).div(new BN(24)).div(new BN(100))
   }
   return {tvl, apy, valueDict, payoutDict}
 }
@@ -170,7 +170,6 @@ function getPrice(supply: BN) {
 async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: string, startBlock: number, endBlock: number) {
   // Fetch all InvestedState events
   const exchange = new web3.eth.Contract(IdeaTokenExchangeABI as any, exchangeAddress)
-  //const existingTokens = JSON.parse(fs.readFileSync('totalTokenList.json','utf8'))
   const existingTokens = JSON.parse(fs.readFileSync('totalTokenList.json','utf8'))
   let {newTokens, lockedEventList} = await parseLocks(web3, vaultAddress, startBlock, endBlock)
   allTokens = Array.from(new Set(newTokens.concat(existingTokens)))

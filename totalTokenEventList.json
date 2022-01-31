@@ -1223,5 +1223,82 @@
     "lockedAmount": "4066cfd9b4cc100000",
     "lockedUntil": "1651284161",
     "lockDuration": "7889400"
+  },
+  {
+    "ideaToken": "0xAA965Ab027c659dbA29FA9F0266A2C637B9502Ef",
+    "user": "0x956a64f1028DE63B3984637dDD10aE96662B3aCd",
+    "lockedAmount": "142020f4087fc500000",
+    "lockedUntil": "1651378471",
+    "lockDuration": "7889400"
+  },
+  {
+    "ideaToken": "0x83B0874194914cFe761fE55FF125BdFCEa66327F",
+    "user": "0x786297c4947408E01A1a977FDa4dB5E53A09c461",
+    "lockedAmount": "1236efcbcbb3400000",
+    "lockedUntil": "1646142685",
+    "lockDuration": "2629800"
+  },
+  {
+    "ideaToken": "0x69371Fc0656Cb44aC71f0608fFd32DBeA73a8835",
+    "user": "0x83713a1bE5A18750d8370a51f9D6fF39F6b4e815",
+    "lockedAmount": "4066cfd9b4cc100000",
+    "lockedUntil": "1651427504",
+    "lockDuration": "7889400"
+  },
+  {
+    "ideaToken": "0xdADFB5710F40b37d610a3D661375351Dfd63f0C0",
+    "user": "0x83713a1bE5A18750d8370a51f9D6fF39F6b4e815",
+    "lockedAmount": "4066cfd9b4cc100000",
+    "lockedUntil": "1651427581",
+    "lockDuration": "7889400"
+  },
+  {
+    "ideaToken": "0x83B0874194914cFe761fE55FF125BdFCEa66327F",
+    "user": "0x5d920Cc69b1aDe6822c38b3815A45A4600b2cbf4",
+    "lockedAmount": "c7d713b49da00000",
+    "lockedUntil": "1651451576",
+    "lockDuration": "7889400"
+  },
+  {
+    "ideaToken": "0xc8e7ed8EF93CbCa396E8CF4058d7506B98560744",
+    "user": "0x5d920Cc69b1aDe6822c38b3815A45A4600b2cbf4",
+    "lockedAmount": "a688906bd8b00000",
+    "lockedUntil": "1651451616",
+    "lockDuration": "7889400"
+  },
+  {
+    "ideaToken": "0xa6FAd25B59bd662b969ddD95407b7C205b0Cc105",
+    "user": "0xef4B2D949AdC5573395Fdb9e1938A92B96CDe142",
+    "lockedAmount": "203367ecda66080000",
+    "lockedUntil": "1675208969",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0xF10AB25F64b0175c1E2eDCc4cF089453b004BB95",
+    "user": "0xef4B2D949AdC5573395Fdb9e1938A92B96CDe142",
+    "lockedAmount": "203367ecda66080000",
+    "lockedUntil": "1675209624",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0x2fc77B86C4e3E52F3d68cACcF2F0E08Bbe5D431B",
+    "user": "0x820F349f103AB787C3Dd717253fd7dB8cF32b163",
+    "lockedAmount": "3b8125e853ae60000",
+    "lockedUntil": "1651545214",
+    "lockDuration": "7889400"
+  },
+  {
+    "ideaToken": "0xF51DA5a366C8f0baaa5514d52dA398A3Fd69F899",
+    "user": "0x820F349f103AB787C3Dd717253fd7dB8cF32b163",
+    "lockedAmount": "20947af55c3dc8000",
+    "lockedUntil": "1675214052",
+    "lockDuration": "31556952"
+  },
+  {
+    "ideaToken": "0x288722c62a9756D63c072176160c85a19Da97323",
+    "user": "0x1E1AaBb22C3943f370E157EA5fe3af42AbB6C768",
+    "lockedAmount": "36d3386f0d5115800",
+    "lockedUntil": "1675217244",
+    "lockDuration": "31556952"
   }
 ]

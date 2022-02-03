@@ -7,6 +7,7 @@ dotenv.config()
 
 import IdeaTokenExchangeABI from './abis/ideaTokenExchange.json'
 import IdeaTokenFactoryABI from './abis/ideaTokenFactory.json'
+import SushiPoolABI from './abis/sushiPool.json'
 import IdeaTokenVaultABI from './abis/ideaTokenVault.json'
 import ERC20ABI from './abis/erc20.json'
 
@@ -14,6 +15,10 @@ type Config = {
   web3: Web3
   exchangeAddress: string
   factoryAddress: string
+  ethImoPool: string
+  ethUsdcPool: string
+  ethImoStaking:string
+  ethImoLPToken: string
   vaultAddress: string
   startBlock: number
   endBlock: number
@@ -25,6 +30,10 @@ const l2Config: Config = {
   exchangeAddress: '0x15ae05599809AF9D1A04C10beF217bc04060dD81',
   factoryAddress: '0xE490A4517F1e8A1551ECb03aF5eB116C6Bbd450b',
   vaultAddress: '0xeC4E1A014fAf0D966332E62970CD7c6553671d76',
+  ethImoPool: '0x9eAE34FAa17CaF99D2109f513edc5A6E3A7435B5',
+  ethUsdcPool: '0x905dfCD5649217c42684f23958568e533C711Aa3',
+  ethImoStaking: '0xb0448763523E129Bfc2Cd20ceeFAcC16c620F726',
+  ethImoLPToken: '0x9eAE34FAa17CaF99D2109f513edc5A6E3A7435B5',
   startBlock: 1746173,
   endBlock: 4423000,
   isL1: false,
@@ -60,10 +69,9 @@ async function main() {
 
 async function run(config: Config) {
   let { web3, exchangeAddress,  vaultAddress, startBlock } = config
-  //fix startblock comes from file
-  //if (false) {
-    startBlock = parseInt(fs.readFileSync("startBlock.json", 'utf8'), 10)
-  //}
+
+  startBlock = parseInt(fs.readFileSync("startBlock.json", 'utf8'), 10)
+
   const endBlock = await web3.eth.getBlockNumber() 
   await dailyPrices(web3, exchangeAddress, vaultAddress, startBlock, endBlock)
   fs.writeFileSync("startBlock.json", endBlock.toString())
@@ -103,40 +111,79 @@ function weighLocked(lockedEventList: LockInfo[]) {
   return lockedEventList
 }
 
-function parseLockedValue(allEventList: LockInfo[], priceDict: { [address: string]: BN }) {
+async function parseLockedValue(allEventList: LockInfo[], priceDict: { [address: string]: BN }) {
   let valueDict: { [address: string]: BN } = {}
   let tvl = new BN(0)
   for (const lock of allEventList) {
     const address = lock.user
     const token = lock.ideaToken
     const price = priceDict[token]
-    console.log("lockedAmount: " + parseInt(lock.lockedAmount.toString(), 16))
-    console.log("lockedAddress: " + lock.ideaToken)
     const amount = new BN(lock.lockedAmount, 16).div(new BN(10).pow(new BN(18)))
-    console.log("price: " + price)
-    console.log("amount: " + amount)
-    const value = price.mul(amount)
-    tvl = tvl.add(value)
-    if (!valueDict[address]) {
-      valueDict[address] = value
+    // if really high price divide price by 2 for more accurate numbers
+    if (amount.gt(new BN('35000'))) {
+      console.log("PRICE HIGH")
+      console.log("lockedAmount: " + new BN(lock.lockedAmount, 16))
+      console.log("lockedAddress: " + lock.ideaToken)
+
+      console.log("price: " + price)
+      console.log("amount: " + amount)
+      const value = price.mul(amount).div(new BN(2))
+      tvl = tvl.add(value)
+      console.log("total value: " + tvl)
+      if (!valueDict[address]) {
+        valueDict[address] = value
+      } else {
+
+        valueDict[address] = valueDict[address].add(value)
+      }
     } else {
-      valueDict[address] = valueDict[address].add(value)
+      console.log("lockedAmount: " + new BN(lock.lockedAmount, 16))
+      console.log("lockedAddress: " + lock.ideaToken)
+      console.log("price: " + price)
+      console.log("amount: " + amount)
+      const value = price.mul(amount)
+      tvl = tvl.add(value)
+      console.log("total value: " + tvl)
+      if (!valueDict[address]) {
+        valueDict[address] = value
+      } else {
+        valueDict[address] = valueDict[address].add(value)
+      }
     }
   }
-  // FIX need to call sushiswap or database for price of IMO to get apy (decimal) in dollars
-  // fix may need to go about apy in different way const apy = TOTAL_PAYOUT..mul(IMO PRICE).mul(new BN(4)).div(tvl)
-  const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100))
+
+  const ethUsdcPool = new l2Config.web3.eth.Contract(SushiPoolABI as any, l2Config.ethUsdcPool)
+  const ethUsdcReserves = await ethUsdcPool.methods.getReserves().call()
+  const ethReserves = ethUsdcReserves["_reserve0"]
+  const usdcReserves = ethUsdcReserves["_reserve1"]
+  const ethPrice = new BN(usdcReserves).mul(new BN(10).pow(new BN(12))).div(new BN(ethReserves))
+  console.log("ethPrice: " + ethPrice)
+  const ethImoPool = new l2Config.web3.eth.Contract(SushiPoolABI as any, l2Config.ethImoPool)
+  const ethImoReserves = await ethImoPool.methods.getReserves().call()
+  const ImoReserves = ethImoReserves["_reserve1"]
+  const ethInImoPool = ethImoReserves["_reserve0"]
+  const imoPrice = new BN(ethInImoPool).mul(ethPrice).mul(new BN(1000)).div(new BN(ImoReserves))
+  console.log("imoPrice: " + imoPrice)
+  const LPContract = new l2Config.web3.eth.Contract(ERC20ABI as any, l2Config.ethImoLPToken)
+  const totalLPStaked = await LPContract.methods.balanceOf(l2Config.ethImoStaking).call()
+  const totalLPStakedInUSD = new BN(totalLPStaked).mul(new BN(43)).div(new BN(10).pow(new BN(18)))
+  console.log("totalLPStakedInUSD" + totalLPStakedInUSD)
+  const LPapr = TOTAL_PAYOUT.mul(imoPrice).div(new BN(1000)).mul(new BN(100)).div(totalLPStakedInUSD).div(new BN(10).pow(new BN(18)))
+  fs.writeFileSync("LPapr.json", LPapr.toString())
+
+  // GET LP APR
+  //const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(new BN(85)).div(new BN(100))
+  const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(imoPrice).div(new BN(1000))
   console.log("total_payout " + TOTAL_PAYOUT)
   console.log("tvl " + tvl)
   console.log("apy " + apy)
   let payoutDict: { [address: string]: BN } = {}
   for (const address in valueDict) {
     // fix this depends on timescale
-    payoutDict[address] = valueDict[address].mul(apy).div(new BN(365)).div(new BN(24)).div(new BN(100))
+    payoutDict[address] = valueDict[address].mul(TOTAL_PAYOUT).mul(new BN(4)).div(new BN(365)).div(tvl).div(new BN(24))
   }
   return {tvl, apy, valueDict, payoutDict}
 }
-
 function getTwapPrices(priceDict: { [address: string]: BN }) {
   let twapDict
   iterations = parseInt(fs.readFileSync('iterations.json', 'utf8'))
@@ -152,7 +199,7 @@ function getTwapPrices(priceDict: { [address: string]: BN }) {
     // computes new average price
     twapDict[token] = (new BN(twapDict[token], 16).mul(new BN(iterations)).add(priceDict[token])).div(new BN(iterations + 1))
     }
-  } 
+  }
   fs.writeFileSync('twap-dict.json', JSON.stringify(twapDict, null, 2))
   iterations++
   fs.writeFileSync('iterations.json', iterations.toString())
@@ -195,7 +242,7 @@ async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: s
   }
 
   const twapPrices = getTwapPrices(priceDict)
-  const { tvl, apy, valueDict, payoutDict } = parseLockedValue(allEvents, twapPrices)
+  const { tvl, apy, valueDict, payoutDict } = await parseLockedValue(allEvents, twapPrices)
   fs.writeFileSync('priceDict-' + timestamp + '.json', JSON.stringify(priceDict, null, 2))
   fs.writeFileSync('valueDict-' + timestamp + '.json', JSON.stringify(valueDict, null, 2))
   fs.writeFileSync('payoutDict-' + timestamp + '.json', JSON.stringify(payoutDict, null, 2))

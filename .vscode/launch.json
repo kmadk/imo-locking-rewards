@@ -7,7 +7,7 @@
             "runtimeExecutable": "node",
             "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
             "envFile": "${workspaceFolder}/.env",
-            "args": ["scripts/locked-twap.ts"],
+            "args": ["run.ts"],
             "cwd": "${workspaceRoot}",
             "internalConsoleOptions": "openOnSessionStart",
             "skipFiles": ["<node_internals>/**", "node_modules/**"]

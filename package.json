@@ -26,6 +26,7 @@
     "@types/cli-progress": "^3.9.2",
     "@types/dotenv": "^8.2.0",
     "@types/mocha": "^5.2.7",
+    "@types/node": "^16.11.7",
     "@types/web3": "^1.2.2",
     "axios": "^0.20.0",
     "chai": "^4.2.0",

@@ -56,7 +56,7 @@ let allEvents: TokenEventDocument[] = [];
 let allTokens: string[] = [];
 let latestIteration: IIterationModel = { id: undefined, value: 0 };
 
-async function main() {
+export async function main() {
   // const lastBlockCHecked = js read file dict["lastBlockCHecked"]
   // const lockedTokenList = js read fine dict["lockedTokenList"]
   // creat a new dict with new values at respective places and rewrite file w new dict
@@ -72,6 +72,8 @@ async function main() {
     console.log("Job finishing at", new Date());
   } catch (error) {
     console.log("Web job terminated due to error", error);
+  } finally {
+    process.exit(0);
   }
 }
 
@@ -409,7 +411,7 @@ async function dailyPrices(
   });
 
   await lockingService.saveTvl({
-    value: apr.toString(),
+    value: tvl.toString(),
     valueAsHex: tvl.toString("hex"),
     blockTimestamp: timestamp,
   });
@@ -487,4 +489,4 @@ async function fetchPastEvents(
   return allEvents;
 }
 
-main();
+// main();

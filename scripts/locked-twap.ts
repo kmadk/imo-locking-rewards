@@ -403,7 +403,7 @@ async function dailyPrices(
 
   const twapPrices = await getTwapPrices(priceDict);
 
-  const { tvl, apr, valueDict, payoutDict } = parseLockedValue(
+  const { tvl, apr, valueDict, payoutDict } = await parseLockedValue(
     allEvents,
     twapPrices
   );

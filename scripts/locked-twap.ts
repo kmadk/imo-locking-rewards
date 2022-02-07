@@ -52,7 +52,6 @@ const TOTAL_PAYOUT = new BN('5000000').mul(new BN('10').pow(new BN('18')))
 const BASE_COST = new BN('100000000000000000')
 const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 let allTokens: string[] = []
 let allEvents: LockInfo[] = []

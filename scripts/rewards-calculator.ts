@@ -53,6 +53,9 @@ const BASE_COST = new BN('100000000000000000')
 const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 
+const rewardStartBlock = new BN('1746173')
+const rewardsEndBlock = new BN('4423000')
+
 let allTokens: string[] = []
 let allEvents: LockInfo[] = []
 let iterations = 0
@@ -68,9 +71,6 @@ async function main() {
 
 async function run(config: Config) {
   let { web3, exchangeAddress,  vaultAddress, startBlock } = config
-
-  startBlock = parseInt(fs.readFileSync("startBlock.json", 'utf8'), 10)
-
   const endBlock = await web3.eth.getBlockNumber() 
   await dailyPrices(web3, exchangeAddress, vaultAddress, startBlock, endBlock)
   fs.writeFileSync("startBlock.json", endBlock.toString())
@@ -216,18 +216,19 @@ function getPrice(supply: BN) {
 async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: string, startBlock: number, endBlock: number) {
   // Fetch all InvestedState events
   const exchange = new web3.eth.Contract(IdeaTokenExchangeABI as any, exchangeAddress)
-  const existingTokens = JSON.parse(fs.readFileSync('totalTokenList.json','utf8'))
+  const existingTokens = JSON.parse(fs.readFileSync('tokenListAdjusted.json','utf8'))
   let {newTokens, lockedEventList} = await parseLocks(web3, vaultAddress, startBlock, endBlock)
   allTokens = Array.from(new Set(newTokens.concat(existingTokens)))
   fs.writeFileSync('totalTokenList.json', JSON.stringify(allTokens, null, 2))
-  const pastEvents = JSON.parse(fs.readFileSync('totalTokenEventList.json','utf8'))
+  const pastEvents = JSON.parse(fs.readFileSync('tokenEventListAdjusted.json','utf8'))
   lockedEventList = weighLocked(lockedEventList)
   allEvents = Array.from(new Set(pastEvents.concat(lockedEventList)))
   const timestamp = (await web3.eth.getBlock(endBlock)).timestamp
-  allEvents = allEvents.filter(function(lock: LockInfo) {
+  /*allEvents = allEvents.filter(function(lock: LockInfo) {
     let amount = new BN(lock.lockedAmount, 16).div(new BN(10).pow(new BN(18)))
     return lock['lockedUntil'] >= timestamp && amount.gt(new BN(3))
   });
+  */
   fs.writeFileSync('totalTokenEventList.json', JSON.stringify(allEvents, null, 2))
   console.log(`\nParsing ${allTokens.length} Token list`)
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)

@@ -54,7 +54,6 @@ const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 
 const rewardStartBlock = 1746173
-const rewardsEndBlock = 4423000
 
 let allTokens: string[] = []
 let allEvents: LockInfo[] = []
@@ -72,7 +71,7 @@ async function main() {
 async function run(config: Config) {
   let { web3, exchangeAddress,  vaultAddress, startBlock } = config
   const endBlock = await web3.eth.getBlockNumber() 
-  await parseAllLocks(web3, exchangeAddress, vaultAddress, startBlock, endBlock, rewardStartBlock, rewardsEndBlock)
+  await parseAllLocks(web3, exchangeAddress, vaultAddress, startBlock, endBlock, rewardStartBlock)
   fs.writeFileSync("startBlock.json", endBlock.toString())
 }
 
@@ -111,8 +110,7 @@ function weighLocked(lockedEventList: LockInfo[]) {
 }
 
 async function parseLockedValue(allEventList: LockInfo[], priceDict: { [address: string]: BN }) {
-  let valueDict: { [address: string]: BN } = {}
-  let tvl = new BN(0)
+
   for (const lock of allEventList) {
     const address = lock.user
     const token = lock.ideaToken
@@ -183,6 +181,7 @@ async function parseLockedValue(allEventList: LockInfo[], priceDict: { [address:
   }
   return {tvl, apy, valueDict, payoutDict}
 }
+
 function getTwapPrices(priceDict: { [address: string]: BN }) {
   let twapDict
   iterations = parseInt(fs.readFileSync('iterations.json', 'utf8'))
@@ -212,7 +211,51 @@ function getPrice(supply: BN) {
   const price = (supply.sub(HATCH_TOKENS)).div(PRICE_RISE).add(BASE_COST)
   return price
 }
-function calculateRewards(allTokens: string[], allEvents: LockInfo[], rewardStartBlock: number, rewardEndBlock: number) {
+
+function calculateRewards(allTokens: string[], allEventList: LockInfo[], priceDict: { [address: string]: BN }, rewardStartBlock: number) {
+  let valueDict: { [address: string]: BN } = {}
+  let tvl = new BN(0)
+  const unixHour = 3600
+  const unixMonth = unixHour * 24 * 30
+  for (let i = rewardStartBlock; i <= i + unixMonth; i + unixHour) {
+    for (const lock of allEventList) {
+      const lockExpiration = lock.lockedUntil
+      const address = lock.user
+      const token = lock.ideaToken
+      const price = priceDict[token]
+      const amount = new BN(lock.lockedAmount, 16).div(new BN(10).pow(new BN(18)))
+      // if really high price divide price by 2 for more accurate numbers
+      if (amount.gt(new BN('35000'))) {
+        console.log("PRICE HIGH")
+        console.log("lockedAmount: " + new BN(lock.lockedAmount, 16))
+        console.log("lockedAddress: " + lock.ideaToken)
+
+        console.log("price: " + price)
+        console.log("amount: " + amount)
+        const value = price.mul(amount).div(new BN(2))
+        tvl = tvl.add(value)
+        console.log("total value: " + tvl)
+        if (!valueDict[address]) {
+          valueDict[address] = value
+        } else {
+
+          valueDict[address] = valueDict[address].add(value)
+        }
+      } else {
+        console.log("lockedAmount: " + new BN(lock.lockedAmount, 16))
+        console.log("lockedAddress: " + lock.ideaToken)
+        console.log("price: " + price)
+        console.log("amount: " + amount)
+        const value = price.mul(amount)
+        tvl = tvl.add(value)
+        console.log("total value: " + tvl)
+        if (!valueDict[address]) {
+          valueDict[address] = value
+        } else {
+          valueDict[address] = valueDict[address].add(value)
+        }
+      }
+  
   // iterate from rewardStartBlock to rewardEndBlock on intervals of 1 hour and calculate rewards based on what
   //locked listings are present at that time and the overall pool size. 
   //Sum up all the rewards for each listing and then each address can log the files and calculate
@@ -222,7 +265,7 @@ function calculateRewards(allTokens: string[], allEvents: LockInfo[], rewardStar
 
 }
 async function parseAllLocks(web3: Web3, exchangeAddress: string,  vaultAddress: string, 
-  startBlock: number, endBlock: number, rewardStartBlock: number, rewardEndBlock: number) {
+  startBlock: number, endBlock: number, rewardStartBlock: number) {
   // Fetch all InvestedState events
   const exchange = new web3.eth.Contract(IdeaTokenExchangeABI as any, exchangeAddress)
   const existingTokens = JSON.parse(fs.readFileSync('tokenListAdjusted.json','utf8'))

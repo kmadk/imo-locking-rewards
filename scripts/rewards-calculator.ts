@@ -53,8 +53,8 @@ const BASE_COST = new BN('100000000000000000')
 const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 
-const rewardStartBlock = new BN('1746173')
-const rewardsEndBlock = new BN('4423000')
+const rewardStartBlock = 1746173
+const rewardsEndBlock = 4423000
 
 let allTokens: string[] = []
 let allEvents: LockInfo[] = []
@@ -72,7 +72,7 @@ async function main() {
 async function run(config: Config) {
   let { web3, exchangeAddress,  vaultAddress, startBlock } = config
   const endBlock = await web3.eth.getBlockNumber() 
-  await dailyPrices(web3, exchangeAddress, vaultAddress, startBlock, endBlock)
+  await parseAllLocks(web3, exchangeAddress, vaultAddress, startBlock, endBlock, rewardStartBlock, rewardsEndBlock)
   fs.writeFileSync("startBlock.json", endBlock.toString())
 }
 
@@ -212,8 +212,17 @@ function getPrice(supply: BN) {
   const price = (supply.sub(HATCH_TOKENS)).div(PRICE_RISE).add(BASE_COST)
   return price
 }
+function calculateRewards(allTokens: string[], allEvents: LockInfo[], rewardStartBlock: number, rewardEndBlock: number) {
+  // iterate from rewardStartBlock to rewardEndBlock on intervals of 1 hour and calculate rewards based on what
+  //locked listings are present at that time and the overall pool size. 
+  //Sum up all the rewards for each listing and then each address can log the files and calculate
 
-async function dailyPrices(web3: Web3, exchangeAddress: string,  vaultAddress: string, startBlock: number, endBlock: number) {
+  // if over certain amount for a listing cut its value in half
+  
+
+}
+async function parseAllLocks(web3: Web3, exchangeAddress: string,  vaultAddress: string, 
+  startBlock: number, endBlock: number, rewardStartBlock: number, rewardEndBlock: number) {
   // Fetch all InvestedState events
   const exchange = new web3.eth.Contract(IdeaTokenExchangeABI as any, exchangeAddress)
   const existingTokens = JSON.parse(fs.readFileSync('tokenListAdjusted.json','utf8'))

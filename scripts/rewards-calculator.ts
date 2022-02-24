@@ -214,16 +214,21 @@ function getPrice(supply: BN) {
 
 function calculateRewards(allTokens: string[], allEventList: LockInfo[], priceDict: { [address: string]: BN }, rewardStartBlock: number) {
   let valueDict: { [address: string]: BN } = {}
+  let payoutDict: { [address: string]: BN } = {}
   let tvl = new BN(0)
   const unixHour = 3600
   const unixMonth = unixHour * 24 * 30
   for (let i = rewardStartBlock; i <= i + unixMonth; i + unixHour) {
     for (const lock of allEventList) {
       const lockExpiration = lock.lockedUntil
+      if (lockExpiration <= i) {
+        continue
+      }
       const address = lock.user
       const token = lock.ideaToken
       const price = priceDict[token]
       const amount = new BN(lock.lockedAmount, 16).div(new BN(10).pow(new BN(18)))
+      let value
       // if really high price divide price by 2 for more accurate numbers
       if (amount.gt(new BN('35000'))) {
         console.log("PRICE HIGH")
@@ -232,29 +237,36 @@ function calculateRewards(allTokens: string[], allEventList: LockInfo[], priceDi
 
         console.log("price: " + price)
         console.log("amount: " + amount)
-        const value = price.mul(amount).div(new BN(2))
-        tvl = tvl.add(value)
-        console.log("total value: " + tvl)
-        if (!valueDict[address]) {
-          valueDict[address] = value
-        } else {
+        value = price.mul(amount).div(new BN(2))
 
-          valueDict[address] = valueDict[address].add(value)
-        }
       } else {
         console.log("lockedAmount: " + new BN(lock.lockedAmount, 16))
         console.log("lockedAddress: " + lock.ideaToken)
         console.log("price: " + price)
         console.log("amount: " + amount)
-        const value = price.mul(amount)
-        tvl = tvl.add(value)
-        console.log("total value: " + tvl)
-        if (!valueDict[address]) {
-          valueDict[address] = value
-        } else {
-          valueDict[address] = valueDict[address].add(value)
-        }
+        value = price.mul(amount)
       }
+      tvl = tvl.add(value)
+      console.log("total value: " + tvl)
+      if (!valueDict[address]) {
+        valueDict[address] = value
+      } else {
+
+        valueDict[address] = valueDict[address].add(value)
+      }
+      // GET LP APR
+      //const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(new BN(85)).div(new BN(100))
+      const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(new BN(12)).div(new BN(100))
+      console.log("total_payout " + TOTAL_PAYOUT)
+      console.log("tvl " + tvl)
+      console.log("apy " + apy)
+      for (const address in valueDict) {
+        // fix this depends on timescale
+        payoutDict[address] = valueDict[address].mul(TOTAL_PAYOUT).mul(new BN(4)).div(new BN(365)).div(tvl).div(new BN(24))
+      }
+
+    }
+  }
   
   // iterate from rewardStartBlock to rewardEndBlock on intervals of 1 hour and calculate rewards based on what
   //locked listings are present at that time and the overall pool size. 

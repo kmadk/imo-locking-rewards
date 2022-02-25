@@ -127,7 +127,8 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
     let tvl = new BN(0)
     for (const lock of allEventList) {
       const lockExpiration = lock.lockedUntil
-      if (lockExpiration < i) {
+      const lockDuration = lock.lockDuration
+      if (lockExpiration < i || lockExpiration - lockDuration > i) {
         continue
       }
       const address = lock.user
@@ -147,10 +148,7 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
       } else {
         valueDict[address] = valueDict[address].add(value)
       }
-      console.log("tvl" + tvl)
-      console.log("value" + value)
       tvl = tvl.add(value)
-
     }
     console.log("tvl " + tvl)
     const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(new BN(12)).div(new BN(100))

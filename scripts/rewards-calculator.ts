@@ -53,11 +53,10 @@ const BASE_COST = new BN('100000000000000000')
 const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 
-const rewardStartBlock = 3711512
+const rewardStartBlock = 5085548
 
 let allTokens: string[] = []
 let allEvents: LockInfo[] = []
-let iterations = 0
 
 async function main() {
   await run(l2Config)
@@ -119,7 +118,7 @@ function getPrice(supply: BN) {
 
 async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict: { [address: string]: BN }, rewardStartBlock: number) {
   let valueDict: { [address: string]: BN } = {}
-  let payoutDict: { [address: string]: BN } = {}
+  let payoutDict: { [address: string]: string } = {}
   const unixHour = 3600
   const unixMonth = unixHour * 24 * 30
   let rewardStartTimestamp = +(await web3.eth.getBlock(rewardStartBlock)).timestamp
@@ -128,7 +127,9 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
     for (const lock of allEventList) {
       const lockExpiration = lock.lockedUntil
       const lockDuration = lock.lockDuration
-      if (lockExpiration < i || lockExpiration - lockDuration > i) {
+      let before  = lockExpiration - lockDuration <= i
+      let after = lockExpiration > i
+      if (lockExpiration > i || lockExpiration - lockDuration <= i) {
         continue
       }
       const address = lock.user
@@ -155,15 +156,15 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
     console.log("apy " + apy)
     for (const address in valueDict) {
       if (!payoutDict[address]) {
-        payoutDict[address] = valueDict[address].mul(TOTAL_PAYOUT).mul(new BN(4)).div(new BN(365)).div(tvl).div(new BN(24))
+        payoutDict[address] = (valueDict[address].mul(TOTAL_PAYOUT).mul(new BN(4)).div(new BN(365)).div(tvl).div(new BN(24))).toString()
       } else {
         // fix this depends on timescale
-        payoutDict[address] = payoutDict[address].add(valueDict[address].mul(TOTAL_PAYOUT).mul(new BN(4)).div(new BN(365)).div(tvl).div(new BN(24)))
+        payoutDict[address] = (new BN(payoutDict[address]).add(valueDict[address].mul(TOTAL_PAYOUT).mul(new BN(4)).div(new BN(365)).div(tvl).div(new BN(24)))).toString()
       }
     }
   }
-  console.log(payoutDict)
-  fs.writeFileSync("rewardsDict.json", JSON.stringify(payoutDict))
+  fs.writeFileSync("rewardsDict.json", JSON.stringify(payoutDict, null, 2))
+  // fix change start reward time to later
   // iterate from rewardStartBlock to rewardEndBlock on intervals of 1 hour and calculate rewards based on what
   //locked listings are present at that time and the overall pool size. 
   //Sum up all the rewards for each listing and then each address can log the files and calculate

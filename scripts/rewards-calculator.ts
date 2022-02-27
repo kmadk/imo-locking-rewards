@@ -42,7 +42,7 @@ const l2Config: Config = {
 type LockInfo = {
   ideaToken: string,
   user: string,
-  lockedAmount: BN,
+  lockedAmount: string,
   lockedUntil: number,
   lockDuration: number,
 }
@@ -53,7 +53,7 @@ const BASE_COST = new BN('100000000000000000')
 const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 
-const rewardStartBlock = 5085548
+const rewardStartBlock = 5290000
 
 let allTokens: string[] = []
 let allEvents: LockInfo[] = []
@@ -102,7 +102,7 @@ function weighLocked(lockedEventList: LockInfo[]) {
   // if timelocked > 1 month multiply amount by 1.2
   for (const lock of lockedEventList) {
     if (lock.lockDuration > 2629800) {
-      lock.lockedAmount = new BN(lock.lockedAmount).mul(new BN('12')).div(new BN('10'))
+      lock.lockedAmount = (new BN(lock.lockedAmount).mul(new BN('12')).div(new BN('10'))).toString()
     }
   }
   return lockedEventList
@@ -117,41 +117,45 @@ function getPrice(supply: BN) {
 }
 
 async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict: { [address: string]: BN }, rewardStartBlock: number) {
-  let valueDict: { [address: string]: BN } = {}
   let payoutDict: { [address: string]: string } = {}
   const unixHour = 3600
   const unixMonth = unixHour * 24 * 30
   let rewardStartTimestamp = +(await web3.eth.getBlock(rewardStartBlock)).timestamp
   let k = 0
   let j = 0
+  let l = 0;
   for (let i = rewardStartTimestamp; i < rewardStartTimestamp + unixMonth; i += unixHour) {
+    let valueDict: { [address: string]: BN } = {}
     j++
     let tvl = new BN(0)
     for (const lock of allEventList) {
       const lockExpiration = lock.lockedUntil
       const lockDuration = lock.lockDuration
+      const lockedAmount = lock.lockedAmount
       const address = lock.user
       const token = lock.ideaToken
       const price = priceDict[token]
-      const amount = new BN(lock.lockedAmount, 16).div(new BN(10).pow(new BN(18)))
+      const amount = new BN(lockedAmount).div(new BN(10).pow(new BN(18)))
+      console.log("lockedAmount: " + new BN(lockedAmount).toString())
+      console.log("amount: " + amount)
       let value
-      //let before  = lockExpiration - lockDuration > i
-      //let after = lockExpiration < i
-      //console.log("before:" + before)
-      //console.log("after: " + after)
       if (lockExpiration < i || lockExpiration - lockDuration > i) {
+        l++
         continue
       }
-      
       // if really high price divide price by 2 for more accurate numbers
-      if (amount.gt(new BN('35000'))) {
-        console.log(address)
-        k++
-        value = price.mul(amount).mul(new BN(3)).div(new BN(4))
-      } if (amount.gt(new BN('15000'))) {
-        console.log(address)
-        k++
+      if (amount.gt(new BN('19900'))) {
         value = price.mul(amount).div(new BN(2))
+        console.log("350000000!!!!!!!!!!")
+        console.log(`address ${address} has ${value.toString()} value  of tokens priced ${price.toString()}`)
+        console.log(`token ${token} has ${amount.toString()}`)
+        console.log(`token ${token} has ${new BN(lockedAmount).toString()}`)
+        k++
+      } else if (amount.gt(new BN('5000'))) {
+        value = price.mul(amount).mul(new BN(3)).div(new BN(4))
+        console.log(`address ${address} has ${value.toString()} value  of tokens priced ${price.toString()}`)
+        console.log(`token ${token} has ${amount.toString()}`)
+        console.log(`token ${token} has ${new BN(lockedAmount).toString()}`)
       } else {
         value = price.mul(amount)
       }
@@ -160,9 +164,6 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
       } else {
         valueDict[address] = valueDict[address].add(value)
       }
-      //console.log(`address ${address} has ${value.toString()} value  of tokens priced ${price.toString()}`)
-      //console.log(`token ${token} has ${amount.toString()}`)
-      //console.log(`token ${token} has ${lock.lockedAmount.toString()}`)
       tvl = tvl.add(value)
     }
     console.log("tvl " + tvl)
@@ -177,10 +178,18 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
       }
     }
   }
+  let totalRewards = 0
+  for (const address in payoutDict) {
+    totalRewards += +payoutDict[address]
+  }
   console.log("k: " + k)
   console.log("j: " + j)
+  console.log("l: " + l)
+  console.log("totalRewards: " + totalRewards)
   fs.writeFileSync("rewardsDict.json", JSON.stringify(payoutDict, null, 2))
   // fix change start reward time to later
+  //fix debug through amount error (non hex integrer locked amounts are getting blown up)
+  // turn every one to hex? Is this the case with locked twap events?
   // iterate from rewardStartBlock to rewardEndBlock on intervals of 1 hour and calculate rewards based on what
   //locked listings are present at that time and the overall pool size. 
   //Sum up all the rewards for each listing and then each address can log the files and calculate
@@ -196,6 +205,9 @@ async function parseAllLocks(web3: Web3, exchangeAddress: string,  vaultAddress:
   allTokens = Array.from(new Set(newTokens.concat(existingTokens)))
   fs.writeFileSync('totalTokenList.json', JSON.stringify(allTokens, null, 2))
   const pastEvents = JSON.parse(fs.readFileSync('tokenEventListAdjusted.json','utf8'))
+  for (const event of pastEvents) {
+    event.lockedAmount = new BN(event.lockedAmount, 16).toString()
+  }
   lockedEventList = weighLocked(lockedEventList)
   allEvents = Array.from(new Set(pastEvents.concat(lockedEventList)))
   /*allEvents = allEvents.filter(function(lock: LockInfo) {
@@ -203,6 +215,9 @@ async function parseAllLocks(web3: Web3, exchangeAddress: string,  vaultAddress:
     return lock['lockedUntil'] >= timestamp && amount.gt(new BN(3))
   });
   */
+  for (const lock of allEvents) {
+    lock.lockedAmount = lock.lockedAmount.toString()
+  }
   fs.writeFileSync('totalTokenEventList.json', JSON.stringify(allEvents, null, 2))
   console.log(`\nParsing ${allTokens.length} Token list`)
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)

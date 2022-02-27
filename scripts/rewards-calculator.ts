@@ -53,7 +53,7 @@ const BASE_COST = new BN('100000000000000000')
 const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 
-const rewardStartBlock = 5290000
+const rewardStartBlock = 5290550
 
 let allTokens: string[] = []
 let allEvents: LockInfo[] = []
@@ -136,8 +136,8 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
       const token = lock.ideaToken
       const price = priceDict[token]
       const amount = new BN(lockedAmount).div(new BN(10).pow(new BN(18)))
-      console.log("lockedAmount: " + new BN(lockedAmount).toString())
-      console.log("amount: " + amount)
+      //console.log("lockedAmount: " + new BN(lockedAmount).toString())
+      //console.log("amount: " + amount)
       let value
       if (lockExpiration < i || lockExpiration - lockDuration > i) {
         l++
@@ -146,16 +146,16 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
       // if really high price divide price by 2 for more accurate numbers
       if (amount.gt(new BN('19900'))) {
         value = price.mul(amount).div(new BN(2))
-        console.log("350000000!!!!!!!!!!")
-        console.log(`address ${address} has ${value.toString()} value  of tokens priced ${price.toString()}`)
-        console.log(`token ${token} has ${amount.toString()}`)
-        console.log(`token ${token} has ${new BN(lockedAmount).toString()}`)
+        //console.log("350000000!!!!!!!!!!")
+        //console.log(`address ${address} has ${value.toString()} value  of tokens priced ${price.toString()}`)
+        //console.log(`token ${token} has ${amount.toString()}`)
+        //console.log(`token ${token} has ${new BN(lockedAmount).toString()}`)
         k++
       } else if (amount.gt(new BN('5000'))) {
         value = price.mul(amount).mul(new BN(3)).div(new BN(4))
-        console.log(`address ${address} has ${value.toString()} value  of tokens priced ${price.toString()}`)
-        console.log(`token ${token} has ${amount.toString()}`)
-        console.log(`token ${token} has ${new BN(lockedAmount).toString()}`)
+        //console.log(`address ${address} has ${value.toString()} value  of tokens priced ${price.toString()}`)
+        //console.log(`token ${token} has ${amount.toString()}`)
+        //console.log(`token ${token} has ${new BN(lockedAmount).toString()}`)
       } else {
         value = price.mul(amount)
       }

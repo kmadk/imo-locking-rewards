@@ -101,7 +101,7 @@ async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, 
 function weighLocked(lockedEventList: LockInfo[]) {
   // if timelocked > 1 month multiply amount by 1.2
   for (const lock of lockedEventList) {
-    if (lock.lockDuration >= 30 * 60 * 60 * 24) {
+    if (lock.lockDuration > 2629800) {
       lock.lockedAmount = new BN(lock.lockedAmount).mul(new BN('12')).div(new BN('10'))
     }
   }
@@ -122,25 +122,36 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
   const unixHour = 3600
   const unixMonth = unixHour * 24 * 30
   let rewardStartTimestamp = +(await web3.eth.getBlock(rewardStartBlock)).timestamp
+  let k = 0
+  let j = 0
   for (let i = rewardStartTimestamp; i < rewardStartTimestamp + unixMonth; i += unixHour) {
+    j++
     let tvl = new BN(0)
     for (const lock of allEventList) {
       const lockExpiration = lock.lockedUntil
       const lockDuration = lock.lockDuration
-      let before  = lockExpiration - lockDuration <= i
-      let after = lockExpiration > i
-      if (lockExpiration > i || lockExpiration - lockDuration <= i) {
-        continue
-      }
       const address = lock.user
       const token = lock.ideaToken
       const price = priceDict[token]
       const amount = new BN(lock.lockedAmount, 16).div(new BN(10).pow(new BN(18)))
       let value
+      //let before  = lockExpiration - lockDuration > i
+      //let after = lockExpiration < i
+      //console.log("before:" + before)
+      //console.log("after: " + after)
+      if (lockExpiration < i || lockExpiration - lockDuration > i) {
+        continue
+      }
+      
       // if really high price divide price by 2 for more accurate numbers
       if (amount.gt(new BN('35000'))) {
+        console.log(address)
+        k++
+        value = price.mul(amount).mul(new BN(3)).div(new BN(4))
+      } if (amount.gt(new BN('15000'))) {
+        console.log(address)
+        k++
         value = price.mul(amount).div(new BN(2))
-
       } else {
         value = price.mul(amount)
       }
@@ -149,6 +160,9 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
       } else {
         valueDict[address] = valueDict[address].add(value)
       }
+      //console.log(`address ${address} has ${value.toString()} value  of tokens priced ${price.toString()}`)
+      //console.log(`token ${token} has ${amount.toString()}`)
+      //console.log(`token ${token} has ${lock.lockedAmount.toString()}`)
       tvl = tvl.add(value)
     }
     console.log("tvl " + tvl)
@@ -163,6 +177,8 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
       }
     }
   }
+  console.log("k: " + k)
+  console.log("j: " + j)
   fs.writeFileSync("rewardsDict.json", JSON.stringify(payoutDict, null, 2))
   // fix change start reward time to later
   // iterate from rewardStartBlock to rewardEndBlock on intervals of 1 hour and calculate rewards based on what
@@ -175,7 +191,6 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
 async function parseAllLocks(web3: Web3, exchangeAddress: string,  vaultAddress: string, 
   startBlock: number, endBlock: number, rewardStartBlock: number) {
   // Fetch all InvestedState events
-  const exchange = new web3.eth.Contract(IdeaTokenExchangeABI as any, exchangeAddress)
   const existingTokens = JSON.parse(fs.readFileSync('tokenListAdjusted.json','utf8'))
   let {newTokens, lockedEventList} = await parseLocks(web3, vaultAddress, startBlock, endBlock)
   allTokens = Array.from(new Set(newTokens.concat(existingTokens)))

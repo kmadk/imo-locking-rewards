@@ -53,7 +53,7 @@ const BASE_COST = new BN('100000000000000000')
 const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 
-const rewardStartBlock = 1746173
+const rewardStartBlock = 3711512
 
 let allTokens: string[] = []
 let allEvents: LockInfo[] = []
@@ -109,101 +109,6 @@ function weighLocked(lockedEventList: LockInfo[]) {
   return lockedEventList
 }
 
-async function parseLockedValue(allEventList: LockInfo[], priceDict: { [address: string]: BN }) {
-
-  for (const lock of allEventList) {
-    const address = lock.user
-    const token = lock.ideaToken
-    const price = priceDict[token]
-    const amount = new BN(lock.lockedAmount, 16).div(new BN(10).pow(new BN(18)))
-    // if really high price divide price by 2 for more accurate numbers
-    if (amount.gt(new BN('35000'))) {
-      console.log("PRICE HIGH")
-      console.log("lockedAmount: " + new BN(lock.lockedAmount, 16))
-      console.log("lockedAddress: " + lock.ideaToken)
-
-      console.log("price: " + price)
-      console.log("amount: " + amount)
-      const value = price.mul(amount).div(new BN(2))
-      tvl = tvl.add(value)
-      console.log("total value: " + tvl)
-      if (!valueDict[address]) {
-        valueDict[address] = value
-      } else {
-
-        valueDict[address] = valueDict[address].add(value)
-      }
-    } else {
-      console.log("lockedAmount: " + new BN(lock.lockedAmount, 16))
-      console.log("lockedAddress: " + lock.ideaToken)
-      console.log("price: " + price)
-      console.log("amount: " + amount)
-      const value = price.mul(amount)
-      tvl = tvl.add(value)
-      console.log("total value: " + tvl)
-      if (!valueDict[address]) {
-        valueDict[address] = value
-      } else {
-        valueDict[address] = valueDict[address].add(value)
-      }
-    }
-  }
-
-  const ethUsdcPool = new l2Config.web3.eth.Contract(SushiPoolABI as any, l2Config.ethUsdcPool)
-  const ethUsdcReserves = await ethUsdcPool.methods.getReserves().call()
-  const ethReserves = ethUsdcReserves["_reserve0"]
-  const usdcReserves = ethUsdcReserves["_reserve1"]
-  const ethPrice = new BN(usdcReserves).mul(new BN(10).pow(new BN(12))).div(new BN(ethReserves))
-  console.log("ethPrice: " + ethPrice)
-  const ethImoPool = new l2Config.web3.eth.Contract(SushiPoolABI as any, l2Config.ethImoPool)
-  const ethImoReserves = await ethImoPool.methods.getReserves().call()
-  const ImoReserves = ethImoReserves["_reserve1"]
-  const ethInImoPool = ethImoReserves["_reserve0"]
-  const imoPrice = new BN(ethInImoPool).mul(ethPrice).mul(new BN(1000)).div(new BN(ImoReserves))
-  console.log("imoPrice: " + imoPrice)
-  const LPContract = new l2Config.web3.eth.Contract(ERC20ABI as any, l2Config.ethImoLPToken)
-  const totalLPStaked = await LPContract.methods.balanceOf(l2Config.ethImoStaking).call()
-  const totalLPStakedInUSD = new BN(totalLPStaked).mul(new BN(43)).div(new BN(10).pow(new BN(18)))
-  console.log("totalLPStakedInUSD" + totalLPStakedInUSD)
-  const LPapr = TOTAL_PAYOUT.mul(imoPrice).div(new BN(1000)).mul(new BN(100)).div(totalLPStakedInUSD).div(new BN(10).pow(new BN(18)))
-  fs.writeFileSync("LPapr.json", LPapr.toString())
-
-  // GET LP APR
-  //const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(new BN(85)).div(new BN(100))
-  const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(imoPrice).div(new BN(1000))
-  console.log("total_payout " + TOTAL_PAYOUT)
-  console.log("tvl " + tvl)
-  console.log("apy " + apy)
-  let payoutDict: { [address: string]: BN } = {}
-  for (const address in valueDict) {
-    // fix this depends on timescale
-    payoutDict[address] = valueDict[address].mul(TOTAL_PAYOUT).mul(new BN(4)).div(new BN(365)).div(tvl).div(new BN(24))
-  }
-  return {tvl, apy, valueDict, payoutDict}
-}
-
-function getTwapPrices(priceDict: { [address: string]: BN }) {
-  let twapDict
-  iterations = parseInt(fs.readFileSync('iterations.json', 'utf8'))
-  if (iterations == 0) {
-    twapDict = priceDict
-  } else {
-    twapDict = JSON.parse(fs.readFileSync('twap-dict.json', 'utf8'))
-  }
-  for (const token of Object.keys(priceDict)) {
-    if (!twapDict[token]) {
-      twapDict[token] = priceDict[token]
-    } else {
-    // computes new average price
-    twapDict[token] = (new BN(twapDict[token], 16).mul(new BN(iterations)).add(priceDict[token])).div(new BN(iterations + 1))
-    }
-  }
-  fs.writeFileSync('twap-dict.json', JSON.stringify(twapDict, null, 2))
-  iterations++
-  fs.writeFileSync('iterations.json', iterations.toString())
-  return twapDict
-}
-
 function getPrice(supply: BN) {
   if (supply.lte(HATCH_TOKENS)) {
     return BASE_COST
@@ -212,16 +117,18 @@ function getPrice(supply: BN) {
   return price
 }
 
-function calculateRewards(allTokens: string[], allEventList: LockInfo[], priceDict: { [address: string]: BN }, rewardStartBlock: number) {
+async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict: { [address: string]: BN }, rewardStartBlock: number) {
   let valueDict: { [address: string]: BN } = {}
   let payoutDict: { [address: string]: BN } = {}
-  let tvl = new BN(0)
   const unixHour = 3600
   const unixMonth = unixHour * 24 * 30
-  for (let i = rewardStartBlock; i <= i + unixMonth; i + unixHour) {
+  let rewardStartTimestamp = +(await web3.eth.getBlock(rewardStartBlock)).timestamp
+  for (let i = rewardStartTimestamp; i < rewardStartTimestamp + unixMonth; i += unixHour) {
+    let tvl = new BN(0)
     for (const lock of allEventList) {
       const lockExpiration = lock.lockedUntil
-      if (lockExpiration <= i) {
+      const lockDuration = lock.lockDuration
+      if (lockExpiration < i || lockExpiration - lockDuration > i) {
         continue
       }
       const address = lock.user
@@ -231,51 +138,39 @@ function calculateRewards(allTokens: string[], allEventList: LockInfo[], priceDi
       let value
       // if really high price divide price by 2 for more accurate numbers
       if (amount.gt(new BN('35000'))) {
-        console.log("PRICE HIGH")
-        console.log("lockedAmount: " + new BN(lock.lockedAmount, 16))
-        console.log("lockedAddress: " + lock.ideaToken)
-
-        console.log("price: " + price)
-        console.log("amount: " + amount)
         value = price.mul(amount).div(new BN(2))
 
       } else {
-        console.log("lockedAmount: " + new BN(lock.lockedAmount, 16))
-        console.log("lockedAddress: " + lock.ideaToken)
-        console.log("price: " + price)
-        console.log("amount: " + amount)
         value = price.mul(amount)
       }
-      tvl = tvl.add(value)
-      console.log("total value: " + tvl)
       if (!valueDict[address]) {
         valueDict[address] = value
       } else {
-
         valueDict[address] = valueDict[address].add(value)
       }
-      // GET LP APR
-      //const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(new BN(85)).div(new BN(100))
-      const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(new BN(12)).div(new BN(100))
-      console.log("total_payout " + TOTAL_PAYOUT)
-      console.log("tvl " + tvl)
-      console.log("apy " + apy)
-      for (const address in valueDict) {
-        // fix this depends on timescale
+      tvl = tvl.add(value)
+    }
+    console.log("tvl " + tvl)
+    const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(new BN(12)).div(new BN(100))
+    console.log("apy " + apy)
+    for (const address in valueDict) {
+      if (!payoutDict[address]) {
         payoutDict[address] = valueDict[address].mul(TOTAL_PAYOUT).mul(new BN(4)).div(new BN(365)).div(tvl).div(new BN(24))
+      } else {
+        // fix this depends on timescale
+        payoutDict[address] = payoutDict[address].add(valueDict[address].mul(TOTAL_PAYOUT).mul(new BN(4)).div(new BN(365)).div(tvl).div(new BN(24)))
       }
-
     }
   }
-  
+  console.log(payoutDict)
+  fs.writeFileSync("rewardsDict.json", JSON.stringify(payoutDict))
   // iterate from rewardStartBlock to rewardEndBlock on intervals of 1 hour and calculate rewards based on what
   //locked listings are present at that time and the overall pool size. 
   //Sum up all the rewards for each listing and then each address can log the files and calculate
 
   // if over certain amount for a listing cut its value in half
-  
-
 }
+
 async function parseAllLocks(web3: Web3, exchangeAddress: string,  vaultAddress: string, 
   startBlock: number, endBlock: number, rewardStartBlock: number) {
   // Fetch all InvestedState events
@@ -287,7 +182,6 @@ async function parseAllLocks(web3: Web3, exchangeAddress: string,  vaultAddress:
   const pastEvents = JSON.parse(fs.readFileSync('tokenEventListAdjusted.json','utf8'))
   lockedEventList = weighLocked(lockedEventList)
   allEvents = Array.from(new Set(pastEvents.concat(lockedEventList)))
-  const timestamp = (await web3.eth.getBlock(endBlock)).timestamp
   /*allEvents = allEvents.filter(function(lock: LockInfo) {
     let amount = new BN(lock.lockedAmount, 16).div(new BN(10).pow(new BN(18)))
     return lock['lockedUntil'] >= timestamp && amount.gt(new BN(3))
@@ -305,13 +199,7 @@ async function parseAllLocks(web3: Web3, exchangeAddress: string,  vaultAddress:
     bar.increment()
   }
 
-  const twapPrices = getTwapPrices(priceDict)
-  const { tvl, apy, valueDict, payoutDict } = await parseLockedValue(allEvents, twapPrices)
-  fs.writeFileSync('priceDict-' + timestamp + '.json', JSON.stringify(priceDict, null, 2))
-  fs.writeFileSync('valueDict-' + timestamp + '.json', JSON.stringify(valueDict, null, 2))
-  fs.writeFileSync('payoutDict-' + timestamp + '.json', JSON.stringify(payoutDict, null, 2))
-  fs.writeFileSync('tvl-' + timestamp + '.json', JSON.stringify(tvl, null, 2))
-  fs.writeFileSync('apy-' + timestamp + '.json', JSON.stringify(apy, null, 2))
+  calculateRewards(web3, allEvents, priceDict, rewardStartBlock)
   
   bar.stop()
 }

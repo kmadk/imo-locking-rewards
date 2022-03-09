@@ -103,7 +103,7 @@ async function parseLocks(web3: Web3, vaultAddress: string, startBlock: number, 
 function weighLocked(lockedEventList: LockInfo[]) {
   // if timelocked > 1 month multiply amount by 1.2
   for (const lock of lockedEventList) {
-    if (lock.lockDuration >= 30 * 60 * 60 * 24) {
+    if (lock.lockDuration > 2629800) {
       lock.lockedAmount = new BN(lock.lockedAmount).mul(new BN('12')).div(new BN('10'))
     }
   }

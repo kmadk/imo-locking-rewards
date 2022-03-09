@@ -53,7 +53,7 @@ const BASE_COST = new BN('100000000000000000')
 const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 
-const rewardStartBlock = 5290550
+const rewardStartBlock = 5510000
 
 let allTokens: string[] = []
 let allEvents: LockInfo[] = []

@@ -53,7 +53,7 @@ const BASE_COST = new BN('100000000000000000')
 const PRICE_RISE = new BN('10000')
 const HATCH_TOKENS = new BN('1000000000000000000000')
 
-const rewardStartBlock = 5510000
+const rewardStartBlock = 7350000
 
 let allTokens: string[] = []
 let allEvents: LockInfo[] = []
@@ -167,7 +167,7 @@ async function calculateRewards(web3: Web3, allEventList: LockInfo[], priceDict:
       tvl = tvl.add(value)
     }
     console.log("tvl " + tvl)
-    const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(new BN(12)).div(new BN(100))
+    const apy = TOTAL_PAYOUT.mul(new BN(4)).div(tvl).mul(new BN(100)).mul(new BN(9)).div(new BN(100))
     console.log("apy " + apy)
     for (const address in valueDict) {
       if (!payoutDict[address]) {

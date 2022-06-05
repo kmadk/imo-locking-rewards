@@ -15,7 +15,6 @@ type Config = {
 }
 
 const l2Config: Config = {
-    //fix
   web3: new Web3(process.env.RPC_MAINNET_L2!),
   nftOpinionBaseAddress: '0xEbc8Ccbd94541EA335eB5Ed5b4FFDC0E8481b9C7',
   startBlock: 14086326,
@@ -30,7 +29,7 @@ async function main() {
   console.log(
     `\nFound ${
         Object.keys(finalCitationNumber).length
-    } & ${Object.keys(finalCitedBy).length} tokens and lockedEvents.`
+    } & ${Object.keys(finalCitedBy).length} tokens and opinionEvents.`
   )
 }
 
@@ -43,22 +42,27 @@ async function run(config: Config) {
 
 async function parseLocks(web3: Web3, citedBy: {[post: number]: [number]}, citationNumber: {[post: number]: number}, 
                             nftOpinionBaseAddress: string, startBlock: number, endBlock: number) {
-  // Fetch all Locked events
+  // Fetch all opinion events
   const opinionBase = new web3.eth.Contract(NFTOpinionBaseABI as any, nftOpinionBaseAddress)
   const opinionEvents = await fetchPastEvents(opinionBase, 'NewOpinion', startBlock, endBlock, true)
   
   // Iterate over events to fetch user addresses
-  console.log(`\nParsing ${opinionEvents.length} Locked events`)
+  console.log(`\nParsing ${opinionEvents.length} opinion events`)
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
   bar.start(opinionEvents.length, 0)
 
   for (const opinionEvent of opinionEvents) {
     const citations = opinionEvent.returnValues['citations']
     for (let i = 0; i < citations.length; i++) {
-        if (!(new Set(citedBy[citations[i]]).has(opinionEvent.returnValues['tokenID']))) {
-            citedBy[citations[i]].push(opinionEvent.returnValues['tokenID'])
+        if (!citedBy[citations[i]]) {
+            citationNumber[citations[i]] = 1
+            citedBy[citations[i]] = [opinionEvent.returnValues['tokenID']]
+        } else {
+            if (!(new Set(citedBy[citations[i]]).has(opinionEvent.returnValues['tokenID']))) {
+                citedBy[citations[i]].push(opinionEvent.returnValues['tokenID'])
+            }
+            citationNumber[citations[i]]++
         }
-        citationNumber[citations[i]]++
     }
     bar.increment()
   }
